@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class triggerEvent : MonoBehaviour
 {
@@ -19,7 +20,9 @@ public class triggerEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        MngrScript.Instance.Score = 20;
         Destroy(square);
-        print("help");
+        print(MngrScript.Instance.Score);
+        SceneManager.LoadScene("MainMenuScene");
     }
 }
