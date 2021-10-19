@@ -20,9 +20,9 @@ public class triggerEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MngrScript.Instance.Score = 20;
-        Destroy(square);
-        print(MngrScript.Instance.Score);
-        SceneManager.LoadScene("MainMenuScene");
+        MngrScript.Instance.FirstDoor = true;
+        //Destroy(other);
+        print(MngrScript.Instance.FirstDoor);
+        //SceneManager.LoadScene("MainMenuScene");
     }
 }

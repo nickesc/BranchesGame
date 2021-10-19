@@ -7,6 +7,8 @@ public class MngrScript : Singleton<MngrScript>
 {
 
     public int Score { get; set;}
+    public bool FirstDoor { get; set;}
+    public bool PlatformDoor { get; set;}
 
     public override void Awake()
     {
