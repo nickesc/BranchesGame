@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CMF
@@ -15,6 +17,15 @@ namespace CMF
 		protected CharacterInput characterInput;
 		protected CeilingDetector ceilingDetector;
 
+		// Freeze variables
+		//public CameraMouseInput cameraMouseInput;
+		protected CharacterInput[] freezeCopy = new CharacterInput[3];
+		protected ControllerState frozenState;
+		protected bool frozen = false;
+		//protected float[] multiplierCopy = new float[3];
+		
+		
+		
         //Jump key variables;
         bool jumpInputIsLocked = false;
         bool jumpKeyWasPressed = false;
@@ -67,7 +78,8 @@ namespace CMF
 			Sliding,
 			Falling,
 			Rising,
-			Jumping
+			Jumping,
+			Frozen
 		}
 		
 		ControllerState currentControllerState = ControllerState.Falling;
@@ -81,6 +93,7 @@ namespace CMF
 			tr = transform;
 			characterInput = GetComponent<CharacterInput>();
 			ceilingDetector = GetComponent<CeilingDetector>();
+			
 
 			if(characterInput == null)
 				Debug.LogWarning("No character input script has been attached to this gameobject", this.gameObject);
@@ -91,6 +104,9 @@ namespace CMF
 		//This function is called right after Awake(); It can be overridden by inheriting scripts;
 		protected virtual void Setup()
 		{
+			freezeCopy[2] = characterInput;
+			frozenState = ControllerState.Falling;
+			//multiplierCopy[2] = cameraMouseInput.mouseInputMultiplier;
 		}
 
 		void Update()
@@ -120,7 +136,50 @@ namespace CMF
 			ControllerUpdate();
 		}
 
-		//Update controller;
+        // MY OWN FUNCTIONS
+        public bool FreezeFeet()
+        {
+	        try
+	        {
+		        PrepFreeze();
+		        characterInput = freezeCopy[0];
+		        return true;
+	        }
+	        catch
+	        {
+		        return false;
+	        }
+        }
+
+        public bool UnfreezeFeet(bool _over=false)
+        {
+	        try
+	        {
+		        if (_over)
+		        {
+			        characterInput = freezeCopy[2];
+		        }
+		        else
+		        {
+			        characterInput = freezeCopy[1];
+		        }
+
+		        return false;
+	        }
+	        catch
+	        {
+		        return true;
+	        }
+        }
+		
+        private void  PrepFreeze()
+        {
+	        freezeCopy[0] = null;
+	        freezeCopy[1] = characterInput;
+	        frozenState = currentControllerState;
+        }
+
+        //Update controller;
 		//This function must be called every fixed update, in order for the controller to work correctly;
 		void ControllerUpdate()
 		{
@@ -170,7 +229,7 @@ namespace CMF
 			if(ceilingDetector != null)
 				ceilingDetector.ResetFlags();
 		}
-
+		
 		//Calculate and return movement direction based on player input;
 		//This function can be overridden by inheriting scripts to implement different player controls;
 		protected virtual Vector3 CalculateMovementDirection()
@@ -334,6 +393,18 @@ namespace CMF
 					}
 				}
 				return ControllerState.Jumping;
+			}
+
+			if (currentControllerState == ControllerState.Frozen)
+			{
+				if (frozen)
+				{
+					currentControllerState = ControllerState.Frozen;
+				}
+				else
+				{
+					currentControllerState = frozenState;
+				}
 			}
 			
 			return ControllerState.Falling;

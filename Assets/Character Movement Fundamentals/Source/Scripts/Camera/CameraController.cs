@@ -11,6 +11,10 @@ namespace CMF
 		//Current rotation values (in degrees);
 		float currentXAngle = 0f;
 		float currentYAngle = 0f;
+		
+		// Freeze variables
+		protected CameraInput[] freezeCopy = new CameraInput[3];
+		protected bool frozen = false;
 
 		//Upper and lower limits (in degrees) for vertical rotation (along the local x-axis of the gameobject);
 		[Range(0f, 90f)]
@@ -75,7 +79,10 @@ namespace CMF
 
 		void Update()
 		{
-			HandleCameraRotation();
+			if (!frozen)
+			{
+				HandleCameraRotation();
+			}
 		}
 
 		//Get user input and handle camera rotation;
@@ -90,6 +97,54 @@ namespace CMF
 			float _inputVertical = cameraInput.GetVerticalCameraInput();
 		
 			RotateCamera(_inputHorizontal, _inputVertical);
+		}
+		
+		// MY OWN FUNCTIONS
+		public bool FreezeMouse()
+		{
+			try
+			{
+				CopyCameraInput();
+				cameraInput = freezeCopy[0];
+				frozen = true;
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public bool UnfreezeMouse(bool _over=false)
+		{
+			try
+			{
+				if (_over)
+				{
+					cameraInput = freezeCopy[2];
+				}
+				else
+				{
+					cameraInput = freezeCopy[1];
+				}
+
+				frozen = false;
+				return false;
+			}
+			catch
+			{
+				return true;
+			}
+		}
+		
+		private void  CopyCameraInput()
+		{
+			freezeCopy[0] = null;
+			freezeCopy[1] = cameraInput;
+			//multiplierCopy[0] = 0;
+			//multiplierCopy[1] = cameraMouseInput.mouseInputMultiplier;
+	        
+
 		}
 
 		//Rotate camera; 
