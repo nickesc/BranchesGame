@@ -38,7 +38,7 @@ public class ApproachLighthouse : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MngrScript.Instance.SetPrompt("Press ["+button+"] to interact");
+        MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
     }
 
     private void OnTriggerExit(Collider other)

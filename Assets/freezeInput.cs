@@ -21,7 +21,7 @@ public class freezeInput : MonoBehaviour
     protected static bool mouseFrozen;
     protected static bool feetFrozen;
     
-    private bool m_isAxisInUse = false;
+    public bool m_isAxisInUse = false;
     
     
     

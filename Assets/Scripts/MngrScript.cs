@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 //using UnityEditor.Timeline.Actions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -71,27 +72,69 @@ public class TestState : IState
     }
 }
 
-
-public class StartState : IState
+public class Menu : IState
 {
     MngrScript mngr;
 
     public string getName()
     {
-        return ("StartState");
+        return ("Menu");
     }
-    public StartState(MngrScript mngr)
+    public Menu(MngrScript mngr)
     {
         this.mngr = mngr;
     }
  
     public void Enter()
     {
-        Debug.Log("entering StartState state");
+        SceneManager.LoadScene("MainMenuScene");
+        Debug.Log("entering Menu state");
+        //mngr.setSunsetSky();
     }
  
     public void Execute()
     {
+        if (mngr.isAxisButtonDown("Jump"))
+        {
+            mngr.ChangeState(new BranchesStart(mngr));
+        }
+    }
+ 
+    public void Exit()
+    {
+        
+        Debug.Log("entering BranchesStart state");
+    }
+}
+public class BranchesStart : IState
+{
+    MngrScript mngr;
+    private bool changedSky = false;
+
+    public string getName()
+    {
+        return ("BranchesStart");
+    }
+    public BranchesStart(MngrScript mngr)
+    {
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        SceneManager.LoadScene("SampleScene");
+        Debug.Log("entering BranchesStart state");
+        
+        
+    }
+ 
+    public void Execute()
+    {
+        if (changedSky == false)
+        {
+            mngr.setSunsetSky();
+            changedSky = true;
+        }
         if (mngr.DisembarkedBoat == true)
         {
             mngr.ChangeState(new DisembarkedBoat(mngr));
@@ -120,6 +163,8 @@ public class DisembarkedBoat : IState
     {
         Debug.Log("entering DisembarkedBoat state");
         mngr.PushSubtitle("It's good to be back...");
+        //mngr.InteractFreeze.Freeze();
+        //mngr.SetImage("blackImage");
     }
  
     public void Execute()
@@ -133,13 +178,15 @@ public class DisembarkedBoat : IState
  
     public void Exit()
     {
-        Debug.Log("entering DisembarkedBoat state");
+        Debug.Log("entering ApproachedLighthouse state");
     }
 }
 
 public class ApproachedLighthouse : IState
 {
     MngrScript mngr;
+    private bool m_isAxisInUse;
+    
     public string getName()
     {
         return ("ApproachedLighthouse");
@@ -153,8 +200,10 @@ public class ApproachedLighthouse : IState
     public void Enter()
     {
         mngr.ReadLousNote = false;
-        mngr.InteractFreeze.Freeze();
-        mngr.SetPrompt("There's a note on the door");
+        mngr.CancelFreeze.Freeze();
+        m_isAxisInUse = true;
+        mngr.PushSubtitle("There's a note on the door", "silenceFive");
+        mngr.SetPrompt("Press [LCtrl] or (B) to close");
         mngr.SetImage("blackImage");
         
         Debug.Log("entering ApproachedLighthouse state");
@@ -164,13 +213,34 @@ public class ApproachedLighthouse : IState
  
     public void Execute()
     {
-        if (mngr.FeetFrozen==false && mngr.ReadLousNote == false)
+        if (mngr.MouseFrozen==false)
         {
-            mngr.SetPrompt("");
-            mngr.SetImage("transparentImage");
-            mngr.ReadLousNote = true;
-            mngr.PushSubtitle("Thanks, Lou.","VASampleClip");
+            if (mngr.ReadLousNote == false)
+            {
+                mngr.SetPrompt("");
+                mngr.SetImage("transparentImage");
+                mngr.ReadLousNote = true;
+                mngr.PushSubtitle("Thanks, Lou.", "VASampleClip");
+            }
+
+            /*if( Input.GetAxisRaw("Interact") != 0)
+            {
+                if(m_isAxisInUse == false)
+                {
+                    // Call your event function here.
+                    m_isAxisInUse = true;
+                    
+                    
+                    
+                }
+            }
+            if( Input.GetAxisRaw("Interact") == 0)
+            {
+                m_isAxisInUse = false;
+            }*/
         }
+
+
 
         if (mngr.InBed)
         {
@@ -247,10 +317,19 @@ public class MngrScript : Singleton<MngrScript>
     List<KeyValuePair<string, string>> subtitleQueue = new List<KeyValuePair<string, string>>();
     private int queueCount = 0;
     public bool playingVA = false;
+
+    //public Material sunset;
+    //public Material night;
     
     //private string[] subtitles = new string[] {};
     //private float[] waitTimes = new float[] {};
 
+    public bool isAxisButtonDown(string button)
+    {
+        //print(Input.GetAxis(_escapeKey));
+        return Input.GetAxis(button) != 0;
+    }
+    
     public void Blackout(bool mode = true)
     {
         if (mode)
@@ -347,6 +426,21 @@ public class MngrScript : Singleton<MngrScript>
             }
         }
     }
+    void tryFindPlayerVA()
+    {
+        if (playerVASource == null)
+        {
+            try
+            {
+                playerVASource = GameObject.FindWithTag("playerVASource").GetComponent<AudioSource>();
+                
+            }
+            catch
+            {
+                print("playerVASource not found yet");
+            }
+        }
+    }
     
     void tryFindCanvas()
     {
@@ -413,13 +507,43 @@ public class MngrScript : Singleton<MngrScript>
             StartCoroutine(SubtitleCoroutine(subtitleQueue[0]));
         }
     }
+
+    void getMaterials()
+    {
+        //
+        //night = Resources.Load<Material>("Skybox/Night3");
+    }
+
+    public void setSunsetSky()
+    {
+        Material sunset = Resources.Load<Material>("Skybox/Sunset1");
+        Color fogColor;
+        string htmlValue = "#F89C84";
+        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
+        {
+            RenderSettings.fogColor = fogColor;
+        }
+        RenderSettings.skybox=sunset;
+    }
+
+    public void setNightSky()
+    {
+        Material night = Resources.Load<Material>("Skybox/Night3");
+        Color fogColor;
+        string htmlValue = "#020013";
+        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
+        {
+            RenderSettings.fogColor = fogColor;
+        }
+        RenderSettings.skybox=night;
+    }
     
     void Start()
     {
-         tryFindFreezers();
-         tryFindCanvas();
-         playerVASource = GameObject.FindWithTag("playerVASource").GetComponent<AudioSource>();
-         stateMachine.ChangeState(new StartState(this));
+         //tryFindFreezers();
+         //tryFindCanvas();
+         //tryFindPlayerVA();
+         stateMachine.ChangeState(new Menu(this));
     }
 
     
@@ -427,9 +551,14 @@ public class MngrScript : Singleton<MngrScript>
     // Update is called once per frame
     void Update()
     {
-        tryFindFreezers();
-        tryFindCanvas();
-        tryPlayVA();
+        if (getCurrentState() != "Menu")
+        {
+            tryFindFreezers();
+            tryFindCanvas();
+            tryFindPlayerVA();
+            tryPlayVA();
+        }
+        
         stateMachine.Update();
     }
 }

@@ -8,7 +8,7 @@ public class helperScript1 : MonoBehaviour
     void Start()
     {
         MngrScript.Instance.Score += 5;
-        print(MngrScript.Instance.Score);
+        //print(MngrScript.Instance.Score);
 
     }
 
