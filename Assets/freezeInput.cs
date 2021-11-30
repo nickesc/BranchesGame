@@ -7,6 +7,8 @@ using UnityEngine;
 public class freezeInput : MonoBehaviour
 {
     //public GameObject walkerController;
+    public bool isTrigger = false;
+    
     public bool controlPause;
     public bool unpauseAllowed;
     public bool freezeMouse;
@@ -29,6 +31,9 @@ public class freezeInput : MonoBehaviour
         MngrScript.Instance.MouseFrozen = false;
         MngrScript.Instance.FeetFrozen = false;
         unpauseAllowed = controlPause;
+        Cursor.lockState = CursorLockMode.None;
+        
+        //walkerController = GameObject.Find("Player");
         
 
     }
@@ -42,7 +47,20 @@ public class freezeInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (MngrScript.Instance.MouseFrozen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        
         //print(Input.GetAxis(escapeKey));
+        
+        
         if( Input.GetAxisRaw(escapeKey) != 0)
         {
             if(m_isAxisInUse == false)
@@ -93,7 +111,10 @@ public class freezeInput : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Freeze(freezeMouse,freezeFeet);
+        if (isTrigger)
+        {
+            Freeze(freezeMouse, freezeFeet);
+        }
     }
 
     public void Freeze(bool mouse=true, bool feet=true)
@@ -122,10 +143,9 @@ public class freezeInput : MonoBehaviour
         {
             Time.timeScale = 0;
         }
-        
-        
-        
     }
+    
+    
     public void Unfreeze(bool mouse=true, bool feet=true)
     {
         if (mouse)

@@ -23,10 +23,10 @@ public class PlatformBarrierScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("help");
-        MngrScript.Instance.PlatformDoor = true;
+        //MngrScript.Instance.PlatformDoor = true;
         Destroy(gameObject);
         Destroy(frontDoorTrigger);
-        print(MngrScript.Instance.PlatformDoor);
+        //print(MngrScript.Instance.PlatformDoor);
         Instantiate(platformBarrier, new Vector3(-23, 41, 9), Quaternion.identity);
         Instantiate(frontDoorBarrier, new Vector3(-24, 2, 25), Quaternion.identity);
         Destroy(this);

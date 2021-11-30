@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SensorToolkit;
 
 namespace CMF
 {
@@ -20,6 +21,7 @@ namespace CMF
 		BoxCollider boxCollider;
 		SphereCollider sphereCollider;
 		CapsuleCollider capsuleCollider;
+		
 
 		//Sensor variables;
 		[Header("Sensor Options :")]

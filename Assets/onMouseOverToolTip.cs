@@ -15,6 +15,7 @@ public class onMouseOverToolTip : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //cam = Camera.main;
         cam = cam.GetComponent<Camera>();
         hint.text = "";
         justCleared = true;

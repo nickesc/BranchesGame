@@ -21,9 +21,9 @@ public class firstDoorScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("help");
-        MngrScript.Instance.FirstDoor = true;
+        //MngrScript.Instance.FirstDoor = true;
         Destroy(gameObject);
-        print(MngrScript.Instance.FirstDoor);
+        //print(MngrScript.Instance.FirstDoor);
         Instantiate(firstDoorBarrier, new Vector3(-24, 2, 25), Quaternion.identity);
         Destroy(this);
         //SceneManager.LoadScene("MainMenuScene");
