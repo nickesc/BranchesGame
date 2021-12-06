@@ -7,7 +7,7 @@ public class PassingTownTrigger : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    private bool disembarkBoatPass = false;
+    private int disembarkBoatPass = 0;
     
     void Start()
     {
@@ -22,14 +22,22 @@ public class PassingTownTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat" && disembarkBoatPass == false)
+        print("crossing PassingTownTrigger");
+        if (other == MngrScript.Instance.playerCollider)
         {
-            MngrScript.Instance.PushSubtitle("Wonder what that is...");
-            MngrScript.Instance.PushSubtitle("Oh well, better get up.");
-            //MngrScript.Instance.PushSubtitle("im so excited");
-            //MngrScript.Instance.PushSubtitle("i hoep to god it actually works");
-            //MngrScript.Instance.PushSubtitle("fuck yes");
-            disembarkBoatPass = true;
+            if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat")
+            {
+                if (disembarkBoatPass == 0)
+                {
+                    MngrScript.Instance.PushSubtitle("Wonder what that is...");
+                }
+                if (disembarkBoatPass == 1)
+                {
+                    MngrScript.Instance.PushSubtitle("Oh well, better get up.");
+                }
+
+                disembarkBoatPass++;
+            }
         }
     }
 }

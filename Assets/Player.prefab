@@ -111,7 +111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459933617478180337}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1461693828417538153}
@@ -252,9 +252,10 @@ GameObject:
   - component: {fileID: 1540571987602775411}
   - component: {fileID: 1572048860702182457}
   - component: {fileID: 1461299957373340689}
+  - component: {fileID: 4336787699945109591}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -287,7 +288,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: e22c35a45fac28e4eb8a295407e775b7, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.375
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 1.25, z: 0}
@@ -305,7 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepHeightRatio: 0.25
   colliderHeight: 2
-  colliderThickness: 1
+  colliderThickness: 0.75
   colliderOffset: {x: 0, y: 0.5, z: 0}
   sensorType: 0
   isInDebugMode: 0
@@ -486,14 +487,31 @@ MonoBehaviour:
   audioSource: {fileID: 1540571987602775411}
   useAnimationBasedFootsteps: 0
   landVelocityThreshold: 5
-  footstepDistance: 3
-  audioClipVolume: 0.2
+  footstepDistance: 2.9
+  audioClipVolume: 0.15
   relativeRandomizedVolumeRange: 0.2
   footStepClips:
-  - {fileID: 8300000, guid: 7341ba07f02fa6941b16a463ddd73f99, type: 3}
-  - {fileID: 8300000, guid: 3efdd4c11a4bdc54a9087ab115c1de9e, type: 3}
-  jumpClip: {fileID: 8300000, guid: 99ab8a4503de1f448ad764a5c4cdf9cc, type: 3}
-  landClip: {fileID: 8300000, guid: c212aa2d646dfe248b7c96b4f0e4cb27, type: 3}
+  - {fileID: 8300000, guid: 196bb5c3789ce9f48adc69336b87e468, type: 3}
+  - {fileID: 8300000, guid: 00e04a3ea1a3ee84b8eb2de2d66debc4, type: 3}
+  - {fileID: 8300000, guid: 32db9610884b5de43912e3b6318955e4, type: 3}
+  - {fileID: 8300000, guid: a38d669e745734842a686f5ecc0fba4e, type: 3}
+  - {fileID: 8300000, guid: 61525bec4e588da48abfb22574270e88, type: 3}
+  - {fileID: 8300000, guid: 1d3b5bec6e01ab94896b4a72a297e5a0, type: 3}
+  - {fileID: 8300000, guid: 015783b0247f9cb43894088eb96a7ffb, type: 3}
+  - {fileID: 8300000, guid: 65f7729b639d4d94584eb74bf09a6760, type: 3}
+  - {fileID: 8300000, guid: 3733337729a65fc4dbef251309f79a0e, type: 3}
+  - {fileID: 8300000, guid: 7f912751719a67c4b8220e29dc5e1a68, type: 3}
+  - {fileID: 8300000, guid: a7c40bff1a6706a4484a733f16d48713, type: 3}
+  - {fileID: 8300000, guid: 682c593d51a9bfa40ba69f575f17fcf1, type: 3}
+  - {fileID: 8300000, guid: 7ad60387fc310b14dbc0a58a14ca6935, type: 3}
+  - {fileID: 8300000, guid: 3c28a8ffe72584f41a5ac7d8b9674286, type: 3}
+  - {fileID: 8300000, guid: b36afa50cae51b144b48d389bfdfd7a0, type: 3}
+  - {fileID: 8300000, guid: 8c2cafeeccdee7445bcd8d6ac229c115, type: 3}
+  - {fileID: 8300000, guid: a39f57d69fb616044bb7e0f3d33b6bb7, type: 3}
+  - {fileID: 8300000, guid: c7afa518fb6982a439797adf21a1be28, type: 3}
+  - {fileID: 8300000, guid: de36f04775d193448829536acf107376, type: 3}
+  jumpClip: {fileID: 8300000, guid: 774f88502059e344a8604ad4a1f23ff1, type: 3}
+  landClip: {fileID: 8300000, guid: 1b2ea7a4638b0854286df54d5e31d919, type: 3}
 --- !u!114 &1461299957373340689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +529,20 @@ MonoBehaviour:
   jumpKey: Jump
   useRawInput: 1
   deadZoneThreshold: 0.2
+--- !u!114 &4336787699945109591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460030625481897275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb5ff05a297d701439ee63a11c273a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lighthouseTPButton: 108
+  player: {fileID: 1460030625481897275}
 --- !u!1 &1460258307998255225
 GameObject:
   m_ObjectHideFlags: 0

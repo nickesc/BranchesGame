@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SensorToolkit;
 using UnityEditor;
 //using UnityEditor.Timeline.Actions;
 using UnityEngine;
@@ -51,30 +52,31 @@ public class TestState : IState
 
     public string getName()
     {
-        return ("");
+        return ("Test");
     }
     
     public TestState(MngrScript owner) { this.mngr = mngr; }
  
     public void Enter()
     {
-        Debug.Log("entering test state");
+        Debug.Log("Entering "+getName()+" state");
     }
  
     public void Execute()
     {
-        Debug.Log("updating test state");
+        //Debug.Log("updating test state");
     }
  
     public void Exit()
     {
-        Debug.Log("exiting test state");
+        Debug.Log("Exiting "+getName()+" state");
     }
 }
 
 public class Menu : IState
 {
     MngrScript mngr;
+    private bool pushed = false;
 
     public string getName()
     {
@@ -88,13 +90,21 @@ public class Menu : IState
     public void Enter()
     {
         SceneManager.LoadScene("MainMenuScene");
-        Debug.Log("entering Menu state");
+        Debug.Log("Entering "+getName()+" state");
         //mngr.setSunsetSky();
     }
  
     public void Execute()
     {
-        if (mngr.isAxisButtonDown("Jump"))
+        if (mngr.isAxisButtonDown("Jump") && pushed==false)
+        {
+            pushed = true;
+            mngr.setNightSky();
+            mngr.Wait(.5f);
+            
+            
+        }
+        if (mngr.waiting != true && pushed==true)
         {
             mngr.ChangeState(new BranchesStart(mngr));
         }
@@ -103,7 +113,7 @@ public class Menu : IState
     public void Exit()
     {
         
-        Debug.Log("entering BranchesStart state");
+        Debug.Log("Exiting "+getName()+" state");
     }
 }
 public class BranchesStart : IState
@@ -119,11 +129,12 @@ public class BranchesStart : IState
     {
         this.mngr = mngr;
     }
+    
  
     public void Enter()
     {
+        Debug.Log("Entering "+getName()+" state");
         SceneManager.LoadScene("SampleScene");
-        Debug.Log("entering BranchesStart state");
         
         
     }
@@ -133,6 +144,8 @@ public class BranchesStart : IState
         if (changedSky == false)
         {
             mngr.setSunsetSky();
+            //mngr.setBlurbs("get to the lighthouse","");
+            mngr.setOneBlurb("get to the lighthouse");
             changedSky = true;
         }
         if (mngr.DisembarkedBoat == true)
@@ -143,7 +156,7 @@ public class BranchesStart : IState
  
     public void Exit()
     {
-        Debug.Log("entering DisembarkedBoat state");
+        Debug.Log("Exiting "+getName()+" state");
     }
 }
 public class DisembarkedBoat : IState
@@ -153,6 +166,20 @@ public class DisembarkedBoat : IState
     {
         return ("DisembarkedBoat");
     }
+    
+    public void SetIslandGameObjects()
+    {
+        Debug.Log("setting game objects");
+        mngr.blockTower=GameObject.FindWithTag("blockTower");
+        mngr.doorFrontOpen=GameObject.FindWithTag("frontDoorOpen");
+        mngr.doorFrontOpen.SetActive(false);
+        mngr.doorFrontClosed=GameObject.FindWithTag("frontDoorClosed");
+        mngr.doorState = true;
+        mngr.basementClosed = GameObject.FindWithTag("basementClosed");
+        mngr.basementOpen = GameObject.FindWithTag("basementOpen");
+        mngr.basementOpen.SetActive(false);
+        mngr.basementState = true;
+    }
 
     public DisembarkedBoat(MngrScript mngr)
     {
@@ -161,24 +188,31 @@ public class DisembarkedBoat : IState
  
     public void Enter()
     {
-        Debug.Log("entering DisembarkedBoat state");
+        Debug.Log("Entering "+getName()+" state");
         mngr.PushSubtitle("It's good to be back...");
+        SetIslandGameObjects();
+        
+        
+
         //mngr.InteractFreeze.Freeze();
         //mngr.SetImage("blackImage");
     }
  
     public void Execute()
     {
+        //Debug.Log(MngrScript.Instance.getBlurbByChar("a") + " getbychar " + MngrScript.Instance.getBlurbByChar("b"));
         //Debug.Log("help please");
         if (mngr.ApproachedLighthouse == true)
         {
+            
             mngr.ChangeState(new ApproachedLighthouse(mngr));
+            
         }
     }
  
     public void Exit()
     {
-        Debug.Log("entering ApproachedLighthouse state");
+        Debug.Log("Exiting "+getName()+" state");
     }
 }
 
@@ -199,14 +233,17 @@ public class ApproachedLighthouse : IState
  
     public void Enter()
     {
+        mngr.chooseBlurbByChar("a");
+        Debug.Log("Entering "+getName()+" state");
+        
         mngr.ReadLousNote = false;
         mngr.CancelFreeze.Freeze();
         m_isAxisInUse = true;
-        mngr.PushSubtitle("There's a note on the door", "silenceFive");
+        mngr.PushSubtitle("There's a note on the door");
         mngr.SetPrompt("Press [LCtrl] or (B) to close");
-        mngr.SetImage("blackImage");
+        mngr.SetImage("LousNote");
         
-        Debug.Log("entering ApproachedLighthouse state");
+        
         
     }
     
@@ -217,67 +254,163 @@ public class ApproachedLighthouse : IState
         {
             if (mngr.ReadLousNote == false)
             {
+                mngr.toggleDoors();
                 mngr.SetPrompt("");
                 mngr.SetImage("transparentImage");
                 mngr.ReadLousNote = true;
-                mngr.PushSubtitle("Thanks, Lou.", "VASampleClip");
+                mngr.PushSubtitle("Thanks, Lou.");
             }
-
-            /*if( Input.GetAxisRaw("Interact") != 0)
-            {
-                if(m_isAxisInUse == false)
-                {
-                    // Call your event function here.
-                    m_isAxisInUse = true;
-                    
-                    
-                    
-                }
-            }
-            if( Input.GetAxisRaw("Interact") == 0)
-            {
-                m_isAxisInUse = false;
-            }*/
         }
-
-
-
+        
         if (mngr.InBed)
         {
-            Exit();
+            //Exit();
+            mngr.ChangeState(new WokeUp(mngr));
         }
     }
-
-    /*IEnumerator ExitFade()
-    {
-        mngr.InteractFreeze.Freeze();
-        mngr.fadeControl.disableWhenFinish = true;
-        mngr.fadeUI.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        //mngr.fadeUI.SetActive(false);
-        
-        mngr.fadeControl.firstToLast = false;
-        mngr.fadeUI.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        mngr.InteractFreeze.Unfreeze();
-        //mngr.fadeUI.SetActive(false);
-    }*/
+    
 
     public void Exit()
     {
+        Debug.Log("Exiting "+getName()+" state");
+        
         mngr.SetPrompt("");
         mngr.Blackout(true);
         mngr.OpeningDone = true;
+        mngr.WokeUp = false;
+    }
+}
+public class WokeUp : IState
+{
+    MngrScript mngr;
+    //private bool m_isAxisInUse;
+    
+    public string getName()
+    {
+        return ("WokeUp");
+    }
 
-        //StartCoroutine(ExitFade());
-
-
-        //mngr.fadeControl.firstToLast = false;
-        //mngr.fadeControl.disableWhenFinish = true;
-        //mngr.fadeUI.SetActive(true);
+    public WokeUp(MngrScript mngr)
+    {
         
-        Debug.Log("we finished!");
-        //mngr.Blackout(false);
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.setNightSky();
+        //mngr.toggleBasement();
+        mngr.setTwoBlurbs("head into town", "light the beacon", "options:");
+        
+        mngr.Wait(5);
+        mngr.PushSubtitle("What time is it? Ugh...");
+        mngr.PushSubtitle("Better get get started on the things Lou mentioned.");
+
+        mngr.blockTower.SetActive(false);
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+
+        if (mngr.waiting==false && mngr.WokeUp==false)
+        {
+            mngr.Blackout(false);
+            mngr.WokeUp = true;
+        }
+
+        if (mngr.GoneUp)
+        {
+            mngr.ChangeState(new GoneUp(mngr));
+        }
+        if (mngr.GoneOut)
+        {
+            mngr.ChangeState(new GoneOut(mngr));
+        }
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+        mngr.toggleDoors();
+    }
+}
+
+public class GoneUp : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("GoneUp");
+    }
+
+    public GoneUp(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("b");
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+       
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+public class GoneOut : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("GoneOut");
+    }
+
+    public GoneOut(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("a");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+       
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
     }
 }
 
@@ -294,28 +427,59 @@ public class MngrScript : Singleton<MngrScript>
     public bool ReadLousNote { get; set;}
     public bool InBed { get; set;}
     public bool OpeningDone { get; set;}
+    public bool WokeUp { get; set;}
+    
+    // if you choose to go up to the light
+    public bool GoneUp { get; set;}
+    //If you choose to leave the lighthouse
+    public bool GoneOut { get; set;}
     
     
     StateMachine stateMachine = new StateMachine();
 
+    public GameObject Player = null;
+    public CapsuleCollider playerCollider = null;
+    public Collider FOVCollider = null;
     private Camera playerCamera;
-    public AudioSource playerVASource;
+    public AudioSource playerVASource = null;
+
+    //public GameObject frontDoorClosed;
+    //public GameObject frontDoorOpen;
+    
+    public GameObject doorFrontClosed;
+    public GameObject doorFrontOpen;
+    public GameObject basementClosed;
+    public GameObject basementOpen;
+    public bool doorState;
+    public bool basementState;
+    public GameObject blockTower;
     
     private GameObject FreezerParent = null;
-    
+    private bool foundFreezers;
+
     public freezeInput CancelFreeze;
     public freezeInput JumpFreeze;
     public freezeInput InteractFreeze;
     public freezeInput PauseFreeze;
-    public freezeInput GameFreeze;
+    public GameFreeze GameFreeze;
 
     public Text promptsUI = null;
     public RawImage imageUI = null;
     public GameObject fadeUI = null;
-    public GDTFadeEffect fadeControl;
+    public Text branchBlurbA = null;
+    public Text branchBlurbB = null;
+    public Text objectiveBlurb = null;
+    public RawImage singleObjective = null;
+    public RawImage doubleObjective = null;
     public Text subtitleUI = null;
     List<KeyValuePair<string, string>> subtitleQueue = new List<KeyValuePair<string, string>>();
     private int queueCount = 0;
+
+    public bool waiting = false;
+    public bool waiting1;
+    public bool waiting2;
+    public bool waiting3;
+    public bool blurbWaiting;
     public bool playingVA = false;
 
     //public Material sunset;
@@ -329,9 +493,10 @@ public class MngrScript : Singleton<MngrScript>
         //print(Input.GetAxis(_escapeKey));
         return Input.GetAxis(button) != 0;
     }
-    
     public void Blackout(bool mode = true)
     {
+        //fadeUI.SetActive(mode);
+        
         if (mode)
         {
             fadeUI.SetActive(true);
@@ -346,9 +511,361 @@ public class MngrScript : Singleton<MngrScript>
     }
     public void SetPrompt(string prompt)
     {
+        print("help " + prompt);
         promptsUI.text = prompt;
     }
 
+
+    public string getBlurbByChar(string blurb, bool @override = false)
+    {
+        if (@override == true)
+        {
+            if (blurb == "a")
+            {
+                return (branchBlurbA.text);
+            }
+
+            if (blurb == "b")
+            {
+                return (branchBlurbB.text);
+            }
+        }
+        
+        if (blurb == "a")
+        {
+            try
+            {
+                return (branchBlurbA.text.Substring(2));
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        if (blurb == "b")
+        {
+            try
+            {
+                return (branchBlurbB.text.Substring(2));
+            }
+            catch
+            {
+                return "";
+            }
+            
+        }
+
+        return "error";
+    }
+
+    public string getObjective(string title, string blurb)
+    {
+        if (blurb == "a")
+        {
+            return title + ":";
+        }
+
+        if (blurb=="b")
+        {
+            return title + ":\n\n\nor";
+        }
+
+        return "error";
+    }
+
+    public string[] getBlurbs()
+    {
+        string[] blurbs = {getBlurbByChar("a"), getBlurbByChar("b")};
+        return blurbs;
+    }
+
+    public string[] clearBlurbs()
+    {
+        singleObjective.enabled = false;
+        doubleObjective.enabled = false;
+
+        branchBlurbA.text = "";
+        branchBlurbB.text = "";
+        objectiveBlurb.text = "";
+        
+        return getBlurbs();
+    }
+
+
+    public string[] setOneBlurb(string text, string title = "objectives")
+    {
+        clearBlurbs();
+
+        branchBlurbA.text = "☐ ";
+
+        branchBlurbA.text = branchBlurbA.text + text;
+        objectiveBlurb.text = getObjective(title, "a");
+        singleObjective.enabled = true;
+
+
+        string[] blurbs = {branchBlurbA.text, branchBlurbB.text};
+        return blurbs;
+
+    }
+    
+    public string[] setTwoBlurbs(string textA, string textB, string title = "objectives")
+    {
+        clearBlurbs();
+
+        branchBlurbA.text = "☐ ";
+        branchBlurbB.text = "☐ ";
+
+        branchBlurbA.text = branchBlurbA.text + textA;
+        branchBlurbB.text = branchBlurbB.text + textB;
+        objectiveBlurb.text = getObjective(title, "b");;
+        doubleObjective.enabled = true;
+
+
+        string[] blurbs = {branchBlurbA.text, branchBlurbB.text};
+        return blurbs;
+
+    }
+
+    IEnumerator ChooseBlurbCoroutine(string blurb)
+    {
+        blurbWaiting = true;
+        yield return new WaitForSeconds(10);
+        if (getBlurbByChar(blurb, true).Contains("☑"))
+        {
+            clearBlurbs();
+        }
+        
+    }
+
+    public string[] chooseBlurbByChar(string blurb)
+    {
+
+        if (getBlurbByChar(blurb) != "")
+        {
+            string textA = getBlurbByChar("a");
+            string textB = getBlurbByChar("b");
+            string objective = objectiveBlurb.text;
+
+            clearBlurbs();
+            
+            objectiveBlurb.text = objective;
+
+            if (blurb == "a")
+            {
+                branchBlurbA.text = "☑ " + textA;
+                singleObjective.enabled = true;
+                StartCoroutine(ChooseBlurbCoroutine(blurb));
+            }
+
+            if (blurb == "b")
+            {
+                branchBlurbA.text = "☐ " + textA;
+                branchBlurbB.text = "☑ " + textB;
+                doubleObjective.enabled = true;
+                StartCoroutine(ChooseBlurbCoroutine(blurb));
+            }
+        }
+        return getBlurbs();
+    }
+    
+    
+/*
+    public string getBlurb(int blurb)
+    {
+        if (blurb == 1)
+        {
+            return (branchBlurbA.text);
+        }
+
+        if (blurb == 2)
+        {
+
+            return (branchBlurbB.text);
+        }
+
+        return "error";
+
+    }
+
+    
+    
+    IEnumerator WaitBlurbCoroutine(int blurb)
+    {
+        
+        bool ready = false;
+        while (getBlurb(1).Contains("☑") || getBlurb(2).Contains("☑"))
+        {
+            //ready = false;
+            
+            yield return null;
+        }
+        //yield return new WaitUntil(chosenBlurb());
+        singleObjective.enabled = false;
+        doubleObjective.enabled = false;
+        if (blurb == 1)
+        {
+            branchBlurbA.text = "☑ " + getBlurb(1).Substring(1);
+            singleObjective.enabled = true;
+            branchBlurbB.text = "";
+            yield return new WaitForSeconds(10);
+            setBlurbs("","");
+        }
+        if (blurb == 2)
+        {
+            branchBlurbB.text = "☑ " + getBlurb(1).Substring(1);
+            doubleObjective.enabled = true;
+            branchBlurbA.text = "";
+            yield return new WaitForSeconds(10);
+            setBlurbs("","");
+        }
+    }
+
+    public void chooseBlurb(int blurb)
+    {
+        if (getBlurb(blurb) != "")
+        {
+            
+            StartCoroutine(WaitBlurbCoroutine(blurb));
+        }
+    }
+
+    public void setBlurbs(string blurbA = "" , string blurbB = "", string objectiveString = "objectives:")
+    {
+        
+        print(getBlurb(1) + " yaky " + getBlurb(2));
+        
+        string tempA = blurbA;
+        string tempB = blurbB;
+
+        if (tempA != "")
+        {
+            tempA = "☐ "+tempA;
+        }
+        if (tempB != "")
+        {
+            tempB = "☐ " + tempB;
+        }
+        branchBlurbA.text = tempA;
+        branchBlurbB.text = tempB;
+
+        singleObjective.enabled = false;
+        doubleObjective.enabled = false;
+        
+        if (branchBlurbA.text == "" && branchBlurbB.text == "")
+        {
+            objectiveBlurb.text = "";
+            
+        }
+        else
+        {
+           
+            if (branchBlurbA.text!="" && branchBlurbB.text=="")
+            {
+                //print(branchBlurbA.text + "/ help");
+                singleObjective.enabled = true;
+            }
+            else if(branchBlurbA.text!="" && branchBlurbB.text!="")
+            {
+                //print(branchBlurbB.text + "/ help");
+                doubleObjective.enabled = true;
+            }
+            objectiveBlurb.text = objectiveString;
+        }
+        
+        
+    }
+    */
+
+    public bool toggleDoors()
+    {
+        if (doorState == true)
+        {
+            doorFrontClosed.SetActive(false);
+            doorFrontOpen.SetActive(true);
+        }
+        else
+        {
+            doorFrontClosed.SetActive(true);
+            doorFrontOpen.SetActive(false);
+        }
+
+        doorState = !doorState;
+        return doorState;
+    }
+    public bool toggleBasement()
+    {
+        if (basementState == true)
+        {
+            basementClosed.SetActive(false);
+            basementOpen.SetActive(true);
+        }
+        else
+        {
+            basementClosed.SetActive(true);
+            basementOpen.SetActive(false);
+        }
+
+        basementState = !basementState;
+        return basementState;
+    }
+
+    IEnumerator Wait3Coroutine(float time)
+    {
+        
+        waiting3 = true;
+        yield return new WaitForSeconds(time);
+        waiting3 = false;
+    }
+
+    IEnumerator Wait2Coroutine(float time)
+    {
+        
+        waiting2 = true;
+        yield return new WaitForSeconds(time);
+        waiting2 = false;
+    }
+    
+    IEnumerator Wait1Coroutine(float time)
+    {
+        
+        waiting1 = true;
+        yield return new WaitForSeconds(time);
+        waiting1 = false;
+    }
+
+    public bool isWaiting()
+    {
+        
+        if (waiting1 || waiting2 || waiting3)
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public void Wait(float time)
+    {
+        if (waiting1)
+        {
+            if (waiting2)
+            {
+                StartCoroutine(Wait3Coroutine(time));
+            }
+            else
+            {
+                StartCoroutine(Wait2Coroutine(time));
+            }
+        }
+        else
+        {
+            StartCoroutine(Wait1Coroutine(time));
+        }
+        
+    }
+    
     IEnumerator SubtitleCoroutine(KeyValuePair<string, string> subtitleInfo)
     {
         while (subtitleUI.text != "")
@@ -367,8 +884,7 @@ public class MngrScript : Singleton<MngrScript>
         subtitleQueue.RemoveAt(0);
         queueCount--;
     }
-    
-    public void PushSubtitle(string subtitle, string fileName = "VASampleClip")
+    public void PushSubtitle(string subtitle, string fileName = "silenceFive")
     {
         
         if (subtitle == "")
@@ -388,23 +904,36 @@ public class MngrScript : Singleton<MngrScript>
     {
         imageUI.texture = Resources.Load<Texture>("UI Images/"+imageName);
     }
+    public void setSunsetSky()
+    {
+        Material sunset = Resources.Load<Material>("Skybox/Sunset1");
+        Color fogColor;
+        string htmlValue = "#F89C84";
+        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
+        {
+            RenderSettings.fogColor = fogColor;
+        }
+        RenderSettings.skybox=sunset;
+    }
+    public void setNightSky()
+    {
+        Material night = Resources.Load<Material>("Skybox/Night3");
+        Color fogColor;
+        string htmlValue = "#020013";
+        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
+        {
+            RenderSettings.fogColor = fogColor;
+        }
+        RenderSettings.skybox=night;
+    }
     public void ChangeState(IState state)
     {
         stateMachine.ChangeState(state);
     }
-
     public string getCurrentState()
     {
         return stateMachine.currentState.getName();
     }
-
-    public override void Awake()
-    {
-        base.Awake();
-    }
-    
-    // Start is called before the first frame update
-
     void tryFindFreezers()
     {
         if (FreezerParent == null)
@@ -418,32 +947,59 @@ public class MngrScript : Singleton<MngrScript>
                 JumpFreeze = TempFreezers[1];
                 InteractFreeze = TempFreezers[2];
                 PauseFreeze = TempFreezers[3];
-                GameFreeze = TempFreezers[3];
+                GameFreeze = GameObject.FindWithTag("gameFreeze").GetComponent<GameFreeze>();
+                
             }
             catch
             {
                 print("freezers not found yet");
+                
+            }
+        }
+
+        if (GameFreeze == null)
+        {
+            GameFreeze = GameObject.FindWithTag("gameFreeze").GetComponent<GameFreeze>();
+            if (GameFreeze == null)
+            {
+                print("GameFreeze not found yet");
             }
         }
     }
-    void tryFindPlayerVA()
+    void tryFindPlayer()
     {
+        if (Player == null)
+        {
+            Player = GameObject.FindWithTag("Player");
+            if (Player == null)
+            {
+                print("Player not found yet");
+            }
+        }
+        
+        try
+        {
+            playerCollider = Player.GetComponent<CapsuleCollider>();
+        }
+        catch
+        {
+            print("PlayerCollider not found yet");
+        }
+
+
+        
         if (playerVASource == null)
         {
-            try
-            {
-                playerVASource = GameObject.FindWithTag("playerVASource").GetComponent<AudioSource>();
-                
-            }
-            catch
+            playerVASource = GameObject.FindWithTag("playerVASource").GetComponent<AudioSource>();
+            if (playerVASource == null)
             {
                 print("playerVASource not found yet");
             }
         }
     }
-    
     void tryFindCanvas()
     {
+        
         if (promptsUI == null)
         {
             try
@@ -459,12 +1015,8 @@ public class MngrScript : Singleton<MngrScript>
         }
         if (imageUI == null)
         {
-            try
-            {
-                imageUI = GameObject.FindWithTag("imageUI").GetComponent<RawImage>();
-               
-            }
-            catch
+            imageUI = GameObject.FindWithTag("imageUI").GetComponent<RawImage>();
+            if (imageUI == null)
             {
                 print("imageUI not found yet");
             }
@@ -473,9 +1025,7 @@ public class MngrScript : Singleton<MngrScript>
         {
             try
             {
-                print("help me");
                 fadeUI = GameObject.FindWithTag("fadeUI");
-                //fadeControl = fadeUI.GetComponent<GDTFadeEffect>();
                 fadeUI.SetActive(false);
                
             }
@@ -498,8 +1048,75 @@ public class MngrScript : Singleton<MngrScript>
             }
         }
         
-    }
+        if (objectiveBlurb == null)
+        {
+            try
+            {
+                objectiveBlurb = GameObject.FindWithTag("objectiveBlurb").GetComponent<Text>();
+                
 
+            }
+            catch
+            {
+                print("objectiveBlurb not found yet");
+            }
+        }
+        if (branchBlurbA == null)
+        {
+            try
+            {
+                branchBlurbA = GameObject.FindWithTag("branchBlurbA").GetComponent<Text>();
+                
+
+            }
+            catch
+            {
+                print("branchBlurbA not found yet");
+            }
+        }
+        if (branchBlurbB == null)
+        {
+            try
+            {
+                branchBlurbB = GameObject.FindWithTag("branchBlurbB").GetComponent<Text>();
+                
+
+            }
+            catch
+            {
+                print("branchBlurbB not found yet");
+            }
+        }
+        if (singleObjective == null)
+        {
+            try
+            {
+                singleObjective = GameObject.FindWithTag("singleObjective").GetComponent<RawImage>();
+                singleObjective.enabled = false;
+
+
+            }
+            catch
+            {
+                print("singleObjective not found yet");
+            }
+        }
+        if (doubleObjective == null)
+        {
+            try
+            {
+                doubleObjective = GameObject.FindWithTag("doubleObjective").GetComponent<RawImage>();
+                doubleObjective.enabled = false;
+
+
+            }
+            catch
+            {
+                print("doubleObjective not found yet");
+            }
+        }
+        
+    }
     void tryPlayVA()
     {
         if (queueCount != 0 && playingVA==false)
@@ -508,54 +1125,29 @@ public class MngrScript : Singleton<MngrScript>
         }
     }
 
-    void getMaterials()
+    public override void Awake()
     {
-        //
-        //night = Resources.Load<Material>("Skybox/Night3");
-    }
-
-    public void setSunsetSky()
-    {
-        Material sunset = Resources.Load<Material>("Skybox/Sunset1");
-        Color fogColor;
-        string htmlValue = "#F89C84";
-        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
-        {
-            RenderSettings.fogColor = fogColor;
-        }
-        RenderSettings.skybox=sunset;
-    }
-
-    public void setNightSky()
-    {
-        Material night = Resources.Load<Material>("Skybox/Night3");
-        Color fogColor;
-        string htmlValue = "#020013";
-        if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
-        {
-            RenderSettings.fogColor = fogColor;
-        }
-        RenderSettings.skybox=night;
+        base.Awake();
     }
     
     void Start()
     {
          //tryFindFreezers();
          //tryFindCanvas();
-         //tryFindPlayerVA();
+         //tryFindPlayer();
          stateMachine.ChangeState(new Menu(this));
     }
-
     
-
     // Update is called once per frame
     void Update()
     {
+        waiting = isWaiting();
+        
         if (getCurrentState() != "Menu")
         {
             tryFindFreezers();
             tryFindCanvas();
-            tryFindPlayerVA();
+            tryFindPlayer();
             tryPlayVA();
         }
         

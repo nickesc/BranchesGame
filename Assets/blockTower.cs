@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class blockTower : MonoBehaviour
 {
+    public string subtitle;
+
+    public string fileName;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +22,12 @@ public class blockTower : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        print("colliding with blockTower");
         if (MngrScript.Instance.playingVA == false)
         {
             if (MngrScript.Instance.getCurrentState() == "ApproachedLighthouse")
             {
-                MngrScript.Instance.PushSubtitle("I should head to bed before I go up...", "silenceFive");
+                MngrScript.Instance.PushSubtitle(subtitle, fileName);
             }
         }
     }

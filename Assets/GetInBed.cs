@@ -36,12 +36,18 @@ public class GetInBed : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+        if (other == FOVCone && MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
+        {
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        MngrScript.Instance.SetPrompt("");
+        if (other == FOVCone && MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
+        {
+            MngrScript.Instance.SetPrompt("");
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -57,19 +63,24 @@ public class GetInBed : MonoBehaviour
 
         
         // if the object needs to freeze the game on interaction, add this:
-        if (other==FOVCone && isAxisButtonDown(button))
+        if (MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
         {
-            print("inbed trigger");
-            triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-            MngrScript.Instance.InBed = true;
-            
-            Destroy(this);
-            //doorsClosed.SetActive(false);
-            //doorsOpen.SetActive(true);
+            if (other == FOVCone && isAxisButtonDown(button))
+            {
+                print("inbed trigger");
+                triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                MngrScript.Instance.InBed = true;
+
+                triggerObject.GetComponent<MeshCollider>().isTrigger = false;
+                //Destroy(triggerObject.GetComponent<Rigidbody>());
+                //Destroy(this);
+                //doorsClosed.SetActive(false);
+                //doorsOpen.SetActive(true);
+            }
         }
-        
-        
-        
+
+
+
         //GameObject originalGameObject = GameObject.Find("FreezeObjects");
         //GameObject child = originalGameObject.transform.GetChild(0).gameObject;
 

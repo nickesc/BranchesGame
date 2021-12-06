@@ -143,9 +143,14 @@ public class freezeInput : MonoBehaviour
         {
             Time.timeScale = 0;
         }
+
+        if (escapeKey == "Pause" && MngrScript.Instance.MouseFrozen)
+        {
+            MngrScript.Instance.SetPrompt("Paused");
+        }
     }
-    
-    
+
+
     public void Unfreeze(bool mouse=true, bool feet=true)
     {
         if (mouse)
@@ -171,6 +176,10 @@ public class freezeInput : MonoBehaviour
         if (controlPause)
         {
             Time.timeScale = 1;
+        }
+        if (escapeKey == "Pause" && MngrScript.Instance.MouseFrozen==false)
+        {
+            MngrScript.Instance.SetPrompt("");
         }
         
     }

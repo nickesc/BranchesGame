@@ -11,6 +11,20 @@ TagManager:
   - subtitleUI
   - playerVASource
   - crosshair
+  - gameFreeze
+  - blockTower
+  - frontDoorOpen
+  - frontDoorClosed
+  - introPathBoxes
+  - playerSensor
+  - objectiveBlurb
+  - branchBlurbA
+  - branchBlurbB
+  - singleObjective
+  - doubleObjective
+  - basementClosed
+  - basementOpen
+  - towerBottomLight
   layers:
   - Default
   - TransparentFX

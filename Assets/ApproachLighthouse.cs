@@ -4,24 +4,66 @@ using System.Collections.Generic;
 using HighlightPlus;
 using UnityEngine;
 
+
+
 public class ApproachLighthouse : MonoBehaviour
 {
+    private Transform target;
     public GameObject triggerObject;
     public string button;
     public Collider FOVCone;
-    public GameObject doorsOpen;
-    public GameObject doorsClosed;
+    public Camera cam;
 
+    private bool seen;
+    private bool unfrozen = false;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        target = triggerObject.GetComponent<Transform>();
+        cam = cam.GetComponent<Camera>();
         triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+        Vector3 viewPos = cam.WorldToViewportPoint(target.position);
+
+        if (seen == false)
+        {
+            if (viewPos.x > 0 && viewPos.x < 1)
+            {
+                if (viewPos.z > 0 && viewPos.z < 30)
+                {
+                    if (viewPos.y > 0 && viewPos.y < 1)
+                    {
+                        MngrScript.Instance.CancelFreeze.Freeze();
+                        seen = true;
+                        
+                        MngrScript.Instance.SetPrompt("Objects outlined in white are interactable\nPress [LCtrl] or (B) to continue");
+                    }
+                }
+               
+                //print(viewPos.z + " helppp");
+
+            }
+        }
+
+        
+        if (seen == true && MngrScript.Instance.FeetFrozen == false)
+        {
+            
+            if (unfrozen == false)
+            {
+                MngrScript.Instance.SetPrompt("");
+            }
+            
+            unfrozen = true;
+        }
+
         if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat")
         {
             triggerObject.GetComponent<HighlightEffect>().SetHighlighted(true);
@@ -38,12 +80,18 @@ public class ApproachLighthouse : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+        if (other == FOVCone && MngrScript.Instance.getCurrentState()=="DisembarkedBoat")
+        {
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        MngrScript.Instance.SetPrompt("");
+        if (other == FOVCone && MngrScript.Instance.getCurrentState()=="DisembarkedBoat")
+        {
+            MngrScript.Instance.SetPrompt("");
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -59,19 +107,22 @@ public class ApproachLighthouse : MonoBehaviour
 
         
         // if the object needs to freeze the game on interaction, add this:
-        if (other==FOVCone && isAxisButtonDown(button))
+        if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat")
         {
-            print("lighthouse trigger");
-            triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-            MngrScript.Instance.ApproachedLighthouse = true;
-            
-            Destroy(triggerObject);
-            doorsClosed.SetActive(false);
-            doorsOpen.SetActive(true);
+            if (other == FOVCone && isAxisButtonDown(button))
+            {
+                print("lighthouse trigger");
+                //MngrScript.Instance.toggleDoors();
+                triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                MngrScript.Instance.ApproachedLighthouse = true;
+                
+                Destroy(triggerObject);
+                
+            }
         }
-        
-        
-        
+
+
+
         //GameObject originalGameObject = GameObject.Find("FreezeObjects");
         //GameObject child = originalGameObject.transform.GetChild(0).gameObject;
 

@@ -74,7 +74,7 @@ namespace CMF
 		//This function is called right after Awake(); It can be overridden by inheriting scripts;
 		protected virtual void Setup()
 		{
-			
+			freezeCopy[2] = cameraInput;
 		}
 
 		void Update()
