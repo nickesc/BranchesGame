@@ -29,11 +29,11 @@ public class PassingTownTrigger : MonoBehaviour
             {
                 if (disembarkBoatPass == 0)
                 {
-                    MngrScript.Instance.PushSubtitle("Wonder what that is...", "silenceFive", false);
+                    MngrScript.Instance.PushSubtitle("Wonder what came in this time...", "silenceFive", false);
                 }
                 if (disembarkBoatPass == 1)
                 {
-                    MngrScript.Instance.PushSubtitle("Oh well, better get up.");
+                    MngrScript.Instance.PushSubtitle("Something to worry about tomorrow", "silenceFive", false);
                 }
 
                 disembarkBoatPass++;
