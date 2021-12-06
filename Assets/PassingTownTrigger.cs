@@ -29,7 +29,7 @@ public class PassingTownTrigger : MonoBehaviour
             {
                 if (disembarkBoatPass == 0)
                 {
-                    MngrScript.Instance.PushSubtitle("Wonder what that is...");
+                    MngrScript.Instance.PushSubtitle("Wonder what that is...", "silenceFive", false);
                 }
                 if (disembarkBoatPass == 1)
                 {

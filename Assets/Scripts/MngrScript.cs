@@ -189,7 +189,7 @@ public class DisembarkedBoat : IState
     public void Enter()
     {
         Debug.Log("Entering "+getName()+" state");
-        mngr.PushSubtitle("It's good to be back...");
+        mngr.PushSubtitle("It's good to be back...", "silenceFive", false);
         SetIslandGameObjects();
         
         
@@ -258,7 +258,7 @@ public class ApproachedLighthouse : IState
                 mngr.SetPrompt("");
                 mngr.SetImage("transparentImage");
                 mngr.ReadLousNote = true;
-                mngr.PushSubtitle("Thanks, Lou.");
+                mngr.PushSubtitle("Thanks, Lou.", "silenceFive", false);
             }
         }
         
@@ -304,8 +304,8 @@ public class WokeUp : IState
         mngr.setTwoBlurbs("head into town", "light the beacon", "options:");
         
         mngr.Wait(5);
-        mngr.PushSubtitle("What time is it? Ugh...");
-        mngr.PushSubtitle("Better get get started on the things Lou mentioned.");
+        mngr.PushSubtitle("What time is it? Ugh...", "silenceFive", false);
+        mngr.PushSubtitle("Better get get started on the things Lou mentioned.", "silenceFive", false);
 
         mngr.blockTower.SetActive(false);
         
@@ -340,6 +340,14 @@ public class WokeUp : IState
     }
 }
 
+//
+//
+//
+// GONE UP BRANCH
+//
+//
+//
+//
 public class GoneUp : IState
 {
     MngrScript mngr;
@@ -366,6 +374,45 @@ public class GoneUp : IState
  
     public void Execute()
     {
+
+        if (mngr.LightOut == true)
+        {
+            mngr.ChangeState(new LightOut(mngr));
+        }
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+public class LightOut : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("LightOut");
+    }
+
+    public LightOut(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+
+
+    }
+    
+ 
+    public void Execute()
+    {
        
         
     }
@@ -376,6 +423,18 @@ public class GoneUp : IState
 
     }
 }
+
+
+
+
+//
+//
+//
+// GONE OUT BRANCH
+//
+//
+//
+//
 public class GoneOut : IState
 {
     MngrScript mngr;
@@ -429,10 +488,18 @@ public class MngrScript : Singleton<MngrScript>
     public bool OpeningDone { get; set;}
     public bool WokeUp { get; set;}
     
+    //
     // if you choose to go up to the light
+    //
     public bool GoneUp { get; set;}
+    
+    public bool LightOut { get; set;}
+    
+    
+    
     //If you choose to leave the lighthouse
     public bool GoneOut { get; set;}
+    
     
     
     StateMachine stateMachine = new StateMachine();
@@ -568,7 +635,7 @@ public class MngrScript : Singleton<MngrScript>
 
         if (blurb=="b")
         {
-            return title + ":\n\n\nor";
+            return title + ":\n\n\n\nor";
         }
 
         return "error";
@@ -884,7 +951,18 @@ public class MngrScript : Singleton<MngrScript>
         subtitleQueue.RemoveAt(0);
         queueCount--;
     }
-    public void PushSubtitle(string subtitle, string fileName = "silenceFive")
+
+    private string cleanForSub(string subtitle, bool thought)
+    {
+        if (thought)
+        {
+            return "*" + subtitle + "*";
+        }
+        return "\"" + subtitle + "\"";
+        
+    }
+    
+    public void PushSubtitle(string subtitle, string fileName = "silenceFive", bool thought  = true)
     {
         
         if (subtitle == "")
@@ -893,7 +971,9 @@ public class MngrScript : Singleton<MngrScript>
         }
         else
         {
-            KeyValuePair<string, string> subtitleInfo = new KeyValuePair<string, string>(subtitle, fileName);
+            
+            
+            KeyValuePair<string, string> subtitleInfo = new KeyValuePair<string, string>(cleanForSub(subtitle,thought), fileName);
             subtitleQueue.Add(subtitleInfo);
             queueCount++;
             //int index = subtitles.IndexOf(subtitleInfo);
