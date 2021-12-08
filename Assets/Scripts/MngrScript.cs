@@ -73,6 +73,45 @@ public class TestState : IState
     }
 }
 
+public class SplashScreen : IState
+{
+    MngrScript mngr;
+    //private bool playing = true;
+
+    public string getName()
+    {
+        return ("SplashScreen");
+    }
+    public SplashScreen(MngrScript mngr)
+    {
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        MngrScript.Instance.Splash = false;
+        Debug.Log("Entering "+getName()+" state");
+        SceneManager.LoadScene("Splash");
+        
+        
+        //mngr.setSunsetSky();
+    }
+
+    public void Execute()
+    {
+        if (mngr.Splash == true)
+        {
+            mngr.ChangeState(new Menu(mngr));
+        }
+    }
+ 
+    public void Exit()
+    {
+        
+        Debug.Log("Exiting "+getName()+" state");
+    }
+}
+
 public class Menu : IState
 {
     MngrScript mngr;
@@ -475,12 +514,14 @@ public class GoneOut : IState
 
 public class MngrScript : Singleton<MngrScript>
 {
+    
     public bool MouseFrozen { get; set;}
     
     public bool FeetFrozen { get; set;}
 
     public int Score { get; set;}
     
+    public bool Splash { get; set;}
     public bool DisembarkedBoat { get; set;}
     public bool ApproachedLighthouse { get; set;}
     public bool ReadLousNote { get; set;}
@@ -1215,7 +1256,7 @@ public class MngrScript : Singleton<MngrScript>
          //tryFindFreezers();
          //tryFindCanvas();
          //tryFindPlayer();
-         stateMachine.ChangeState(new Menu(this));
+         stateMachine.ChangeState(new SplashScreen(this));
     }
     
     // Update is called once per frame
@@ -1223,7 +1264,7 @@ public class MngrScript : Singleton<MngrScript>
     {
         waiting = isWaiting();
         
-        if (getCurrentState() != "Menu")
+        if (getCurrentState() != "Menu" && getCurrentState() != "SplashScreen")
         {
             tryFindFreezers();
             tryFindCanvas();

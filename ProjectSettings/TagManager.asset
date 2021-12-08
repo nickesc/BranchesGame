@@ -25,6 +25,7 @@ TagManager:
   - basementClosed
   - basementOpen
   - towerBottomLight
+  - YachtApproaching
   layers:
   - Default
   - TransparentFX
