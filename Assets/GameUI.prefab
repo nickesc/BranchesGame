@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8200715313241437215}
   - component: {fileID: 1347398300124766317}
   - component: {fileID: 9148697308096011319}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: doubleObjective
   m_TagString: doubleObjective
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 1985219179914801986}
   - component: {fileID: 3318302328768136021}
   - component: {fileID: 8624725366485521553}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8258766970242766744}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 3635615752019089587}
   - component: {fileID: 3604993398655158282}
   - component: {fileID: 8139780320112704958}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   - component: {fileID: 8828864184339330429}
   - component: {fileID: 2847970467393704598}
   - component: {fileID: 5649766420738148621}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: Crosshair
   m_TagString: crosshair
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 2590511864538391502}
   - component: {fileID: 6143924098420544426}
   - component: {fileID: 6655601205078313694}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: Image UI
   m_TagString: imageUI
   m_Icon: {fileID: 0}
@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 3017610918404753553}
   - component: {fileID: 5591677725337846845}
   - component: {fileID: 5323188977781821953}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: SubtitleUI
   m_TagString: subtitleUI
   m_Icon: {fileID: 0}
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 4989230398071402952}
   - component: {fileID: 4989230398071402950}
   - component: {fileID: 4989230398071402951}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: Prompts UI
   m_TagString: promptsUI
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6352204761266656468}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: GameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 7884756005440698360}
   - component: {fileID: 3378774904844627937}
   - component: {fileID: 6096142687648149605}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: objectives
   m_TagString: objectiveBlurb
   m_Icon: {fileID: 0}
@@ -714,7 +714,7 @@ GameObject:
   - component: {fileID: 728580406759146592}
   - component: {fileID: 8550792389187993895}
   - component: {fileID: 5827607683297021808}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: branchA
   m_TagString: promptsUI
   m_Icon: {fileID: 0}
@@ -793,7 +793,7 @@ GameObject:
   - component: {fileID: 2144599159215966754}
   - component: {fileID: 2542823073670607676}
   - component: {fileID: 8369648546283538942}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: singleObjective
   m_TagString: singleObjective
   m_Icon: {fileID: 0}
@@ -865,7 +865,7 @@ GameObject:
   - component: {fileID: 8940023043780360315}
   - component: {fileID: 9161831091051887596}
   - component: {fileID: 873037367436792132}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: branchB
   m_TagString: promptsUI
   m_Icon: {fileID: 0}
@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 4505537428406733144}
   - component: {fileID: 1677070264998674306}
   - component: {fileID: 5296682041563966433}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: blackBackground
   m_TagString: fadeUI
   m_Icon: {fileID: 0}

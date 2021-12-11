@@ -159,6 +159,7 @@ public class BranchesStart : IState
 {
     MngrScript mngr;
     private bool changedSky = false;
+    //private bool changedLight = false;
 
     public string getName()
     {
@@ -182,6 +183,16 @@ public class BranchesStart : IState
     {
         if (changedSky == false)
         {
+            try
+            {
+                mngr.sunsetLight = GameObject.FindWithTag("sunsetLight");
+                mngr.nightLight = GameObject.FindWithTag("nightLight");
+            }
+            catch
+            {
+                Debug.Log("something is wrong with the sky");
+            }
+
             mngr.setSunsetSky();
             //mngr.setBlurbs("get to the lighthouse","");
             mngr.setOneBlurb("get to the lighthouse");
@@ -218,6 +229,9 @@ public class DisembarkedBoat : IState
         mngr.basementOpen = GameObject.FindWithTag("basementOpen");
         mngr.basementOpen.SetActive(false);
         mngr.basementState = true;
+        mngr.yacht = GameObject.FindWithTag("yacht");
+        mngr.yacht.SetActive(false);
+        
     }
 
     public DisembarkedBoat(MngrScript mngr)
@@ -298,12 +312,14 @@ public class ApproachedLighthouse : IState
                 mngr.SetImage("transparentImage");
                 mngr.ReadLousNote = true;
                 mngr.PushSubtitle("Thanks, Lou.", "silenceFive", false);
+                mngr.setOneBlurb("get to bed");
             }
         }
         
         if (mngr.InBed)
         {
             //Exit();
+            mngr.chooseBlurbByChar("a");
             mngr.ChangeState(new WokeUp(mngr));
         }
     }
@@ -339,8 +355,9 @@ public class WokeUp : IState
     {
         Debug.Log("Entering "+getName()+" state");
         mngr.setNightSky();
+        mngr.yacht.SetActive(false);
         //mngr.toggleBasement();
-        mngr.setTwoBlurbs("head into town", "light the beacon", "options:");
+        mngr.setTwoBlurbs("head into town", "light the beacon", 7,"options");
         
         mngr.Wait(5);
         mngr.PushSubtitle("What time is it? Ugh...", "silenceFive", false);
@@ -406,6 +423,7 @@ public class GoneUp : IState
     {
         Debug.Log("Entering "+getName()+" state");
         mngr.chooseBlurbByChar("b");
+        mngr.PushSubtitle("What's that on the water?","silenceFive",false);
 
 
     }
@@ -561,6 +579,10 @@ public class MngrScript : Singleton<MngrScript>
     public bool doorState;
     public bool basementState;
     public GameObject blockTower;
+
+    public GameObject yacht;
+    public GameObject nightLight;
+    public GameObject sunsetLight;
     
     private GameObject FreezerParent = null;
     private bool foundFreezers;
@@ -589,6 +611,8 @@ public class MngrScript : Singleton<MngrScript>
     public bool waiting3;
     public bool blurbWaiting;
     public bool playingVA = false;
+    public bool tryingToLight = false;
+    private bool blurbWait = false;
 
     //public Material sunset;
     //public Material night;
@@ -700,9 +724,22 @@ public class MngrScript : Singleton<MngrScript>
         return getBlurbs();
     }
 
-
-    public string[] setOneBlurb(string text, string title = "objectives")
+    IEnumerator SetBlurbWait(int time)
     {
+        blurbWait = true;
+        yield return new WaitForSeconds(time);
+        blurbWait = false;
+    }
+
+    public string[] setOneBlurb(string text, int time=0, string title = "objectives")
+    {
+        StartCoroutine(SetBlurbWait(time));
+
+        while (blurbWait)
+        {
+            blurbWait = blurbWait;
+        }
+        
         clearBlurbs();
 
         branchBlurbA.text = "☐ ";
@@ -717,8 +754,16 @@ public class MngrScript : Singleton<MngrScript>
 
     }
     
-    public string[] setTwoBlurbs(string textA, string textB, string title = "objectives")
+    public string[] setTwoBlurbs(string textA, string textB,int time = 0, string title = "objectives")
     {
+        
+        StartCoroutine(SetBlurbWait(time));
+
+        while (blurbWait)
+        {
+            blurbWait = blurbWait;
+        }
+        
         clearBlurbs();
 
         branchBlurbA.text = "☐ ";
@@ -757,10 +802,11 @@ public class MngrScript : Singleton<MngrScript>
 
             clearBlurbs();
             
-            objectiveBlurb.text = objective;
+            
 
             if (blurb == "a")
             {
+                objectiveBlurb.text = objective.Replace("\n\n\n\nor","");
                 branchBlurbA.text = "☑ " + textA;
                 singleObjective.enabled = true;
                 StartCoroutine(ChooseBlurbCoroutine(blurb));
@@ -768,6 +814,7 @@ public class MngrScript : Singleton<MngrScript>
 
             if (blurb == "b")
             {
+                objectiveBlurb.text = objective;
                 branchBlurbA.text = "☐ " + textA;
                 branchBlurbB.text = "☑ " + textB;
                 doubleObjective.enabled = true;
@@ -776,114 +823,7 @@ public class MngrScript : Singleton<MngrScript>
         }
         return getBlurbs();
     }
-    
-    
-/*
-    public string getBlurb(int blurb)
-    {
-        if (blurb == 1)
-        {
-            return (branchBlurbA.text);
-        }
-
-        if (blurb == 2)
-        {
-
-            return (branchBlurbB.text);
-        }
-
-        return "error";
-
-    }
-
-    
-    
-    IEnumerator WaitBlurbCoroutine(int blurb)
-    {
-        
-        bool ready = false;
-        while (getBlurb(1).Contains("☑") || getBlurb(2).Contains("☑"))
-        {
-            //ready = false;
-            
-            yield return null;
-        }
-        //yield return new WaitUntil(chosenBlurb());
-        singleObjective.enabled = false;
-        doubleObjective.enabled = false;
-        if (blurb == 1)
-        {
-            branchBlurbA.text = "☑ " + getBlurb(1).Substring(1);
-            singleObjective.enabled = true;
-            branchBlurbB.text = "";
-            yield return new WaitForSeconds(10);
-            setBlurbs("","");
-        }
-        if (blurb == 2)
-        {
-            branchBlurbB.text = "☑ " + getBlurb(1).Substring(1);
-            doubleObjective.enabled = true;
-            branchBlurbA.text = "";
-            yield return new WaitForSeconds(10);
-            setBlurbs("","");
-        }
-    }
-
-    public void chooseBlurb(int blurb)
-    {
-        if (getBlurb(blurb) != "")
-        {
-            
-            StartCoroutine(WaitBlurbCoroutine(blurb));
-        }
-    }
-
-    public void setBlurbs(string blurbA = "" , string blurbB = "", string objectiveString = "objectives:")
-    {
-        
-        print(getBlurb(1) + " yaky " + getBlurb(2));
-        
-        string tempA = blurbA;
-        string tempB = blurbB;
-
-        if (tempA != "")
-        {
-            tempA = "☐ "+tempA;
-        }
-        if (tempB != "")
-        {
-            tempB = "☐ " + tempB;
-        }
-        branchBlurbA.text = tempA;
-        branchBlurbB.text = tempB;
-
-        singleObjective.enabled = false;
-        doubleObjective.enabled = false;
-        
-        if (branchBlurbA.text == "" && branchBlurbB.text == "")
-        {
-            objectiveBlurb.text = "";
-            
-        }
-        else
-        {
-           
-            if (branchBlurbA.text!="" && branchBlurbB.text=="")
-            {
-                //print(branchBlurbA.text + "/ help");
-                singleObjective.enabled = true;
-            }
-            else if(branchBlurbA.text!="" && branchBlurbB.text!="")
-            {
-                //print(branchBlurbB.text + "/ help");
-                doubleObjective.enabled = true;
-            }
-            objectiveBlurb.text = objectiveString;
-        }
-        
-        
-    }
-    */
+ 
 
     public bool toggleDoors()
     {
@@ -1034,6 +974,16 @@ public class MngrScript : Singleton<MngrScript>
         {
             RenderSettings.fogColor = fogColor;
         }
+        try
+        {
+            
+            nightLight.SetActive(false);
+            sunsetLight.SetActive(true);
+        }
+        catch
+        {
+            print("something is wrong with the sun");
+        }
         RenderSettings.skybox=sunset;
     }
     public void setNightSky()
@@ -1044,6 +994,16 @@ public class MngrScript : Singleton<MngrScript>
         if (ColorUtility.TryParseHtmlString(htmlValue, out fogColor))
         {
             RenderSettings.fogColor = fogColor;
+        }
+
+        try
+        {
+            nightLight.SetActive(true);
+            sunsetLight.SetActive(false);
+        }
+        catch
+        {
+            print("something is wrong with the sun");
         }
         RenderSettings.skybox=night;
     }

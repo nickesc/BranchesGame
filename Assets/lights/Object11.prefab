@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2689608595350381455}
   - component: {fileID: 2689608595349381455}
   - component: {fileID: 1257635075067625616}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 0.9411765, a: 1}
+  m_Color: {r: 1, g: 1, b: 0.78039217, a: 1}
   m_Intensity: 0.5
   m_Range: 7.34
   m_SpotAngle: 89
@@ -177,7 +177,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingLayerMask: 1
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0

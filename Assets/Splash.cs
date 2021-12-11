@@ -22,4 +22,14 @@ public class Splash : MonoBehaviour
         MngrScript.Instance.Splash = true;
     }
 
+    void Update()
+    {
+        if (MngrScript.Instance.isAxisButtonDown("Jump") && MngrScript.Instance.Splash == false)
+        {
+            MngrScript.Instance.Splash = true;
+
+
+        }
+
+    }
 }

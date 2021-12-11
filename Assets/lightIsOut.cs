@@ -27,9 +27,10 @@ public class lightIsOut : MonoBehaviour
     {
         if (lighted == false)
         {
-            if (MngrScript.Instance.getCurrentState() == "GoneUp")
+            if (MngrScript.Instance.tryingToLight==true)
             {
                 triggerObject.GetComponent<HighlightEffect>().SetHighlighted(true);
+                lighted = true;
             }
         }
 
@@ -37,6 +38,7 @@ public class lightIsOut : MonoBehaviour
         {
             MngrScript.Instance.PushSubtitle("You've gotta be kidding me, Lou. You broke the igniter",
                 "silenceFive", false);
+            MngrScript.Instance.chooseBlurbByChar("a");
             sent = true;
         }
     }
@@ -53,7 +55,7 @@ public class lightIsOut : MonoBehaviour
         print("trigger enter");
         if (activated == false)
         {
-            if (other == FOVCone && MngrScript.Instance.getCurrentState() == "GoneUp")
+            if (other == FOVCone && lighted)
             {
                 MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
             }
@@ -87,7 +89,7 @@ public class lightIsOut : MonoBehaviour
         // if the object needs to freeze the game on interaction, add this:
         if (activated == false)
         {
-            if (MngrScript.Instance.getCurrentState() == "GoneUp")
+            if (lighted)
             {
                 if (other == FOVCone && isAxisButtonDown(button))
                 {

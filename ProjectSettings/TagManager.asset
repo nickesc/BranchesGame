@@ -26,6 +26,9 @@ TagManager:
   - basementOpen
   - towerBottomLight
   - YachtApproaching
+  - yacht
+  - sunsetLight
+  - nightLight
   layers:
   - Default
   - TransparentFX
@@ -36,7 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - streetLight
   - 
   - 
   - 
