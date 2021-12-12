@@ -784,15 +784,25 @@ public class FixTheLight : IState
         mngr.chooseBlurbByChar("b");
         mngr.PushSubtitle("I guess I'd better find a way to fix this light","Keeper16", false);
         mngr.setTwoBlurbs("bring Lou up from his shop","use tools from the basement", "fix the light");
+        mngr.ChoosingFix = true;
         mngr.toggleDoors();
-        mngr.toggleBasement();
+        //mngr.toggleBasement();
+        mngr.basementClosed.SetActive(false);
+        mngr.basementOpen.SetActive(true);
     }
     
  
     public void Execute()
     {
         
-        
+        if (mngr.BasementTools == true)
+        {
+            mngr.ChangeState(new BasementTools(mngr));
+        }
+        else if (mngr.AttackLou == true)
+        {
+            mngr.ChangeState(new AttackLou(mngr));
+        }
     }
 
     public void Exit()
@@ -802,6 +812,95 @@ public class FixTheLight : IState
     }
 }
 
+public class AttackLou : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("AttackLou");
+    }
+
+    public AttackLou(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+
+    
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        //mngr.chooseBlurbByChar("b");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+
+        
+       
+        
+    }
+
+    public void Exit()
+    {
+        //mngr.LeavingWeDidnt = true;
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+public class BasementTools : MonoBehaviour, IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("BasementTools");
+    }
+
+    public BasementTools(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+
+    IEnumerator WaitForChange()
+    {
+        mngr.chooseBlurbByChar("a");
+        yield return new WaitForSeconds(3);
+        mngr.setOneBlurb("fix the light", "objective");
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        StartCoroutine(WaitForChange());
+
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+
+        
+       
+        
+    }
+
+    public void Exit()
+    {
+        //mngr.LeavingWeDidnt = true;
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
 
 
 //
@@ -938,6 +1037,9 @@ public class MngrScript : Singleton<MngrScript>
 
     // Fix the Light Branch
     public bool FixTheLight { get; set; }
+    public bool ChoosingFix { get; set; }
+    public bool BasementTools { get; set; }
+    public bool AttackLou { get; set; }
     
     
     //If you choose to leave the lighthouse
@@ -946,6 +1048,7 @@ public class MngrScript : Singleton<MngrScript>
     
     public bool Fin { get; set; }
     public bool SeeingShip { get; set; }
+    
 
 
     StateMachine stateMachine = new StateMachine();
@@ -1018,19 +1121,25 @@ public class MngrScript : Singleton<MngrScript>
         //print(Input.GetAxis(_escapeKey));
         return Input.GetAxis(button) != 0;
     }
-    public void Blackout(bool mode = true)
+    public void Blackout(bool mode = true, bool pause= true)
     {
         //fadeUI.SetActive(mode);
         
         if (mode)
         {
             fadeUI.SetActive(true);
-            GameFreeze.Freeze();
+            if (pause)
+            {
+                GameFreeze.Freeze();
+            }
         }
         else
         {
             fadeUI.SetActive(false);
-            GameFreeze.Unfreeze();
+            if (pause)
+            {
+                GameFreeze.Unfreeze();
+            }
         }
 
     }

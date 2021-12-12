@@ -91,7 +91,7 @@ public class LightIt : MonoBehaviour
         beaconFire2.SetActive(true);
         yield return new WaitForSeconds(2);
         MngrScript.Instance.Lit = true;
-        MngrScript.Instance.PushSubtitle("I'd better make sure they're alright", "silenceFive", true);
+        MngrScript.Instance.PushSubtitle("I'd better make sure they're alright", "Keeper27", false);
         Destroy(gameObject);
     }
 

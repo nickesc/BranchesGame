@@ -14,6 +14,7 @@ public class foghornLeghorn : MonoBehaviour
     public string button;
     public Collider FOVCone;
     public AudioSource foggy;
+    public AudioClip crash;
 
     // Start is called before the first frame update
     void Start()
@@ -65,18 +66,6 @@ public class foghornLeghorn : MonoBehaviour
         }
     }
 
-    IEnumerator foghornSequence()
-    {
-        MngrScript.Instance.PushSubtitle("I hope this is loud enough...","Keeper26",false);
-        yield return new WaitForSeconds(3);
-        //foghorn
-        yield return new WaitForSeconds(2);
-        //crash
-        yield return new WaitForSeconds(3);
-        MngrScript.Instance.PushSubtitle("Oh no...","Keeper22",false);
-        Destroy(this);
-    }
-
     private void OnTriggerStay(Collider other)
     {
         
@@ -105,7 +94,11 @@ public class foghornLeghorn : MonoBehaviour
                     //MngrScript.Instance.chooseBlurbByChar("b");
                     triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
                     MngrScript.Instance.SetPrompt("");
-                    StartCoroutine(foghornSequence());
+                    MngrScript.Instance.PushSubtitle("I hope this is loud enough...","Keeper26",false);
+                    MngrScript.Instance.PushSubtitle("foghorn","foghorn");
+                    MngrScript.Instance.PushSubtitle("distant shipwreck","crash");
+                    MngrScript.Instance.PushSubtitle("Oh no...","Keeper22",false);
+                    Destroy(this);
 
                     //MngrScript.Instance.Alternatives = true;
 

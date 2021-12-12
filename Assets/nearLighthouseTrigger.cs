@@ -7,6 +7,9 @@ public class nearLighthouseTrigger : MonoBehaviour
 {
     private bool leftForLevel2 = false;
 
+    public AudioSource ocean;
+    private int volumeBit = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,17 @@ public class nearLighthouseTrigger : MonoBehaviour
         if (other == MngrScript.Instance.playerCollider)
         {
             print("crossing nearLighthouseTrigger");
+
+            if (volumeBit % 2 == 0)
+            {
+                ocean.volume = .4f;
+            }
+            else
+            {
+                ocean.volume = .7f;
+            }
+
+            volumeBit++;
 
             if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat" && MngrScript.Instance.getBlurbByChar("a") != "")
             {
