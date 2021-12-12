@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class nearLighthouseTrigger : MonoBehaviour
 {
+    private bool leftForLevel2 = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,15 @@ public class nearLighthouseTrigger : MonoBehaviour
             if (MngrScript.Instance.getCurrentState() == "WokeUp")
             {
                 MngrScript.Instance.GoneOut = true;
+            }
+
+            if (MngrScript.Instance.getCurrentState() == "Alternatives" || MngrScript.Instance.getCurrentState() == "FixTheLight")
+            {
+                if (leftForLevel2==false)
+                { 
+                    MngrScript.Instance.toggleDoors(); 
+                    leftForLevel2 = true;
+                }
             }
         }
     }

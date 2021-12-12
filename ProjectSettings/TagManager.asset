@@ -29,6 +29,8 @@ TagManager:
   - yacht
   - sunsetLight
   - nightLight
+  - yachtBeached
+  - cargo
   layers:
   - Default
   - TransparentFX

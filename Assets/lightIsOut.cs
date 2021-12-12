@@ -14,6 +14,7 @@ public class lightIsOut : MonoBehaviour
     public GameObject triggerObject;
     public string button;
     public Collider FOVCone;
+    private bool tryRadio = false;
 
     // Start is called before the first frame update
     void Start()
@@ -27,20 +28,32 @@ public class lightIsOut : MonoBehaviour
     {
         if (lighted == false)
         {
-            if (MngrScript.Instance.tryingToLight==true)
+            if (MngrScript.Instance.tryingToLight==true && MngrScript.Instance.playingVA==false)
             {
                 triggerObject.GetComponent<HighlightEffect>().SetHighlighted(true);
                 lighted = true;
             }
         }
+        
+        if (sent == true && MngrScript.Instance.playingVA == false && tryRadio==false)
+        {
+            tryRadio = true;
+            MngrScript.Instance.setOneBlurb("radio the ship");
+            MngrScript.Instance.Radioing = true;
+            Destroy(this);
+        }
 
         if (activated && sent == false)
         {
             MngrScript.Instance.PushSubtitle("You've gotta be kidding me, Lou. You broke the igniter",
-                "silenceFive", false);
-            MngrScript.Instance.chooseBlurbByChar("a");
+                "Keeper10", false);
+            MngrScript.Instance.PushSubtitle("I should try to radio them, they still can't see a thing out there",
+                "Keeper18", false);
+            MngrScript.Instance.chooseBlurbByChar("a",false);
             sent = true;
         }
+
+        
     }
 
     bool isAxisButtonDown(string _button)

@@ -15,6 +15,12 @@ public class noticeShip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (MngrScript.Instance.tryingToLight == true && MngrScript.Instance.playingVA==false)
+        {
+            MngrScript.Instance.setOneBlurb("switch on the light");
+            Destroy(gameObject);
+        }
         
     }
 
@@ -22,13 +28,12 @@ public class noticeShip : MonoBehaviour
     {
         if (other == player)
         {
-            if (MngrScript.Instance.getCurrentState() == "GoneUp")
+            if (MngrScript.Instance.getCurrentState() == "GoneUp" && MngrScript.Instance.tryingToLight==false)
             {
-                MngrScript.Instance.PushSubtitle("Oh no... That ship is gonna crash straight into the beach!", "silenceFive", false);
-                MngrScript.Instance.PushSubtitle("I need to turn on the light to signal them, they can't tell in the dark that theres an island in front of them", "silenceFive",false);
-                MngrScript.Instance.setOneBlurb("switch on the light");
+                MngrScript.Instance.PushSubtitle("Oh no... That ship is gonna crash straight into the beach!", "Keeper11", false);
+                MngrScript.Instance.PushSubtitle("I need to turn on the light to signal them, they can't tell in the dark that theres an island in front of them", "Keeper13",false);
                 MngrScript.Instance.tryingToLight = true;
-                Destroy(gameObject);
+                
             }
         }
     }

@@ -27,7 +27,7 @@ Keeper: You've gotta be kidding me, Lou. You broke the igniter
 
 Keeper: I should try to radio them, they still can't see a thing out there
 
-Keeper: Damn, no answer
+Keeper: Crap, no answer
 
 Keeper: What am I gonna do now?
 

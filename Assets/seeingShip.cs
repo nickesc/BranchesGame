@@ -41,7 +41,7 @@ public class seeingShip : MonoBehaviour
                         {
                             //MngrScript.Instance.CancelFreeze.Freeze();
                             seen = true;
-                            MngrScript.Instance.PushSubtitle("That doesn't look good...", "silenceFive", false);
+                            MngrScript.Instance.PushSubtitle("That doesn't look good...", "Keeper5", false);
                             //MngrScript.Instance.SetPrompt("Objects outlined in white are interactable\nPress [LCtrl] or (B) to continue");
                         }
 

@@ -231,6 +231,8 @@ public class DisembarkedBoat : IState
         mngr.basementState = true;
         mngr.yacht = GameObject.FindWithTag("yacht");
         mngr.yacht.SetActive(false);
+        mngr.yachtBeached = GameObject.FindWithTag("yachtBeached");
+        mngr.yachtBeached.SetActive(false);
         
     }
 
@@ -242,7 +244,7 @@ public class DisembarkedBoat : IState
     public void Enter()
     {
         Debug.Log("Entering "+getName()+" state");
-        mngr.PushSubtitle("It's good to be back...", "silenceFive", false);
+        mngr.PushSubtitle("It's good to be back...", "Keeper1", false);
         SetIslandGameObjects();
         
         
@@ -311,7 +313,7 @@ public class ApproachedLighthouse : IState
                 mngr.SetPrompt("");
                 mngr.SetImage("transparentImage");
                 mngr.ReadLousNote = true;
-                mngr.PushSubtitle("Thanks, Lou.", "silenceFive", false);
+                mngr.PushSubtitle("Thanks, Lou.", "Keeper3", false);
                 mngr.setOneBlurb("get to bed");
             }
         }
@@ -355,13 +357,13 @@ public class WokeUp : IState
     {
         Debug.Log("Entering "+getName()+" state");
         mngr.setNightSky();
-        mngr.yacht.SetActive(false);
+        mngr.yacht.SetActive(true);
         //mngr.toggleBasement();
-        mngr.setTwoBlurbs("head into town", "light the beacon", 7,"options");
+        mngr.setTwoBlurbs("head into town", "climb up to the beacon", "options");
         
         mngr.Wait(5);
-        mngr.PushSubtitle("What time is it? Ugh...", "silenceFive", false);
-        mngr.PushSubtitle("Better get get started on the things Lou mentioned.", "silenceFive", false);
+        mngr.PushSubtitle("What time is it? Ugh...", "Keeper8", false);
+        mngr.PushSubtitle("Better get started on those things Lou mentioned.", "Keeper4", false);
 
         mngr.blockTower.SetActive(false);
         
@@ -423,7 +425,7 @@ public class GoneUp : IState
     {
         Debug.Log("Entering "+getName()+" state");
         mngr.chooseBlurbByChar("b");
-        mngr.PushSubtitle("What's that on the water?","silenceFive",false);
+        mngr.PushSubtitle("What's that on the water?","Keeper17",false);
 
 
     }
@@ -470,6 +472,285 @@ public class LightOut : IState
  
     public void Execute()
     {
+        if (mngr.Radioing == true)
+        {
+            mngr.ChangeState(new Radioing(mngr));
+        }
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+public class Radioing : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("Radioing");
+    }
+
+    public Radioing(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+        if (mngr.WhatNext == true)
+        {
+            mngr.ChangeState(new WhatNext(mngr));
+        }
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+public class WhatNext : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("WhatNext");
+    }
+
+    public WhatNext(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.setTwoBlurbs("fix the light", "check for alternatives", "options");
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+
+        if (mngr.Alternatives == true)
+        {
+            mngr.ChangeState(new Alternatives(mngr));
+        }
+        if (mngr.FixTheLight == true)
+        {
+            mngr.ChangeState(new FixTheLight(mngr));
+        }
+        
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+// Alternatives Branch
+
+public class Alternatives : IState
+{
+    MngrScript mngr;
+    private bool pushedObj;
+    private bool readyForObj = false;
+    
+    public string getName()
+    {
+        return ("Alternatives");
+    }
+
+    public Alternatives(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("b");
+        mngr.PushSubtitle("Forget the light, there are other ways to signal a ship","Keeper15", false);
+        pushedObj = false;
+        
+        //fix
+        readyForObj = true;
+        //mngr.setTwoBlurbs("fix the light", "check for alternatives", "options");
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+
+        if (readyForObj == true)
+        {
+            if (mngr.playingVA==false && pushedObj == false)
+            {
+                mngr.PushSubtitle("I know the foghorn on the boat I came in on was pretty loud. Or...","Keeper23",false);
+                mngr.setTwoBlurbs("use the tugboat's horn", "light a fire", "alternatives");
+                mngr.toggleDoors();
+                mngr.ChoosingAlt = true; // IF MNGR.CHOOSINGLT=FALSE AFTER THIS DELETE BOTH SCRIPTS
+                pushedObj = true;
+            }
+        }
+
+        if (mngr.WeDidntStartTheFire == true)
+        {
+            mngr.ChangeState(new WeDidntStartTheFire(mngr));
+        }
+        else if (mngr.FoghornLeghorn == true)
+        {
+            mngr.ChangeState(new FoghornLeghorn(mngr));
+        }
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+public class WeDidntStartTheFire : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("WeDidntStartTheFire");
+    }
+
+    public WeDidntStartTheFire(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+
+    
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("b");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+
+        if (mngr.Lit)
+        {
+            mngr.ChangeState(new Lit(mngr));
+        }
+       
+        
+    }
+
+    public void Exit()
+    {
+        //mngr.LeavingWeDidnt = true;
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+public class Lit : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("Lit");
+    }
+
+    public Lit(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+
+    
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        //mngr.chooseBlurbByChar("b");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+       
+        
+    }
+
+    public void Exit()
+    {
+        mngr.LeavingWeDidnt = true;
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+public class FoghornLeghorn : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("FoghornLeghorn");
+    }
+
+    public FoghornLeghorn(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("a");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
        
         
     }
@@ -481,6 +762,45 @@ public class LightOut : IState
     }
 }
 
+// Fix the Light Branch
+public class FixTheLight : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("FixTheLight");
+    }
+
+    public FixTheLight(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.chooseBlurbByChar("b");
+        mngr.PushSubtitle("I guess I'd better find a way to fix this light","Keeper16", false);
+        mngr.setTwoBlurbs("bring Lou up from his shop","use tools from the basement", "fix the light");
+        mngr.toggleDoors();
+        mngr.toggleBasement();
+    }
+    
+ 
+    public void Execute()
+    {
+        
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
 
 
 
@@ -554,13 +874,36 @@ public class MngrScript : Singleton<MngrScript>
     
     public bool LightOut { get; set;}
     
+    public bool Radioing { get; set; }
+    public bool Radioed { get; set; }
+    
+    public bool WhatNext { get; set; }
+    
+    //Alternatives Branch
+    public bool Alternatives { get; set; }
+
+    public bool ChoosingAlt { get; set; }
+    
+    
+    // Blaze Branch
+    public bool WeDidntStartTheFire { get; set; }
+    public bool LeavingWeDidnt { get; set; }
+    public bool Lit { get; set; }
+    
+    //Foghorn Branch
+    public bool FoghornLeghorn { get; set; }
+    
+    
+
+    // Fix the Light Branch
+    public bool FixTheLight { get; set; }
     
     
     //If you choose to leave the lighthouse
     public bool GoneOut { get; set;}
     
-    
-    
+
+
     StateMachine stateMachine = new StateMachine();
 
     public GameObject Player = null;
@@ -581,6 +924,7 @@ public class MngrScript : Singleton<MngrScript>
     public GameObject blockTower;
 
     public GameObject yacht;
+    public GameObject yachtBeached;
     public GameObject nightLight;
     public GameObject sunsetLight;
     
@@ -610,9 +954,10 @@ public class MngrScript : Singleton<MngrScript>
     public bool waiting2;
     public bool waiting3;
     public bool blurbWaiting;
+    public bool tpTimeout = false;
     public bool playingVA = false;
     public bool tryingToLight = false;
-    private bool blurbWait = false;
+
 
     //public Material sunset;
     //public Material night;
@@ -724,22 +1069,9 @@ public class MngrScript : Singleton<MngrScript>
         return getBlurbs();
     }
 
-    IEnumerator SetBlurbWait(int time)
-    {
-        blurbWait = true;
-        yield return new WaitForSeconds(time);
-        blurbWait = false;
-    }
 
-    public string[] setOneBlurb(string text, int time=0, string title = "objectives")
+    public string[] setOneBlurb(string text, string title = "objectives")
     {
-        StartCoroutine(SetBlurbWait(time));
-
-        while (blurbWait)
-        {
-            blurbWait = blurbWait;
-        }
-        
         clearBlurbs();
 
         branchBlurbA.text = "☐ ";
@@ -754,16 +1086,8 @@ public class MngrScript : Singleton<MngrScript>
 
     }
     
-    public string[] setTwoBlurbs(string textA, string textB,int time = 0, string title = "objectives")
+    public string[] setTwoBlurbs(string textA, string textB, string title = "objectives")
     {
-        
-        StartCoroutine(SetBlurbWait(time));
-
-        while (blurbWait)
-        {
-            blurbWait = blurbWait;
-        }
-        
         clearBlurbs();
 
         branchBlurbA.text = "☐ ";
@@ -784,15 +1108,20 @@ public class MngrScript : Singleton<MngrScript>
     {
         blurbWaiting = true;
         yield return new WaitForSeconds(10);
-        if (getBlurbByChar(blurb, true).Contains("☑"))
+        if (getBlurbByChar(blurb, true).Contains("☑") || getBlurbByChar(blurb, true).Contains("☒"))
         {
             clearBlurbs();
         }
         
     }
 
-    public string[] chooseBlurbByChar(string blurb)
+    public string[] chooseBlurbByChar(string blurb, bool success=true)
     {
+        string check = "☑";
+        if (success==false)
+        {
+            check = "☒";
+        }
 
         if (getBlurbByChar(blurb) != "")
         {
@@ -807,7 +1136,7 @@ public class MngrScript : Singleton<MngrScript>
             if (blurb == "a")
             {
                 objectiveBlurb.text = objective.Replace("\n\n\n\nor","");
-                branchBlurbA.text = "☑ " + textA;
+                branchBlurbA.text = check+" " + textA;
                 singleObjective.enabled = true;
                 StartCoroutine(ChooseBlurbCoroutine(blurb));
             }
@@ -816,7 +1145,7 @@ public class MngrScript : Singleton<MngrScript>
             {
                 objectiveBlurb.text = objective;
                 branchBlurbA.text = "☐ " + textA;
-                branchBlurbB.text = "☑ " + textB;
+                branchBlurbB.text = check+" " + textB;
                 doubleObjective.enabled = true;
                 StartCoroutine(ChooseBlurbCoroutine(blurb));
             }
