@@ -64,6 +64,7 @@ public class fixingOptions : MonoBehaviour
             if (other == FOVCone && lighted)
             {
                 MngrScript.Instance.SetPrompt("Press [E] or (X) to check for ways to fix the light");
+                set = true;
             }
         }
     }
@@ -79,7 +80,8 @@ public class fixingOptions : MonoBehaviour
             }
         }
     }
-    
+
+    private bool set = false;
 
     private void OnTriggerStay(Collider other)
     {
@@ -98,18 +100,26 @@ public class fixingOptions : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    activated = true;
-                    
-                    print("alternatives");
-                    MngrScript.Instance.chooseBlurbByChar("a");
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    MngrScript.Instance.FixTheLight = true;
-                    Destroy(this);
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to check for ways to fix the light");
+                        set = true;
+                    }
 
+                    if (isAxisButtonDown(button))
+                    {
+                        activated = true;
 
+                        print("alternatives");
+                        MngrScript.Instance.chooseBlurbByChar("a");
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        MngrScript.Instance.FixTheLight = true;
+                        Destroy(this);
+
+                    }
                 }
             }
         }

@@ -11,12 +11,14 @@ public class LightIt : MonoBehaviour
     public GameObject triggerObject;
     public string button;
     public Collider FOVCone;
+    
 
     public GameObject hallFire;
     public GameObject towerFire1;
     public GameObject towerFire2;
     public GameObject beaconFire1;
     public GameObject beaconFire2;
+    public TrailRenderer gasTrail;
 
     // Start is called before the first frame update
     void Start()
@@ -73,10 +75,13 @@ public class LightIt : MonoBehaviour
 
     IEnumerator LightItCoroutine()
     {
+        MngrScript.Instance.turnAround = true;
         MngrScript.Instance.PushSubtitle("...", "silenceFive", false);
         yield return new WaitForSeconds(2);
+        gasTrail.Clear();
+        yield return new WaitForSeconds(2);
         hallFire.SetActive(true);
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(2);
         towerFire1.SetActive(true);
         yield return new WaitForSeconds(3);
         towerFire2.SetActive(true);
@@ -84,6 +89,9 @@ public class LightIt : MonoBehaviour
         beaconFire1.SetActive(true);
         yield return new WaitForSeconds(2);
         beaconFire2.SetActive(true);
+        yield return new WaitForSeconds(2);
+        MngrScript.Instance.Lit = true;
+        MngrScript.Instance.PushSubtitle("I'd better make sure they're alright", "silenceFive", true);
         Destroy(gameObject);
     }
 
@@ -109,9 +117,8 @@ private void OnTriggerStay(Collider other)
             {
                 if (other == FOVCone && isAxisButtonDown(button))
                 {
-                    MngrScript.Instance.Lit = true;
                     activated = true;
-                    MngrScript.Instance.WeDidntStartTheFire = true;
+                    //MngrScript.Instance.WeDidntStartTheFire = true;
                     
                     print("we didn't start the fire");
                     MngrScript.Instance.chooseBlurbByChar("a");

@@ -58,7 +58,8 @@ public class TryRadio : MonoBehaviour
         {
             if (other == FOVCone && lighted)
             {
-                MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+                MngrScript.Instance.SetPrompt("Press [E] or (X) to radio the ship");
+                set = true;
             }
         }
     }
@@ -88,6 +89,8 @@ public class TryRadio : MonoBehaviour
 
     }
 
+    private bool set = false;
+
     private void OnTriggerStay(Collider other)
     {
 
@@ -105,17 +108,25 @@ public class TryRadio : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    activated = true;
-                    
-                    print("radioing");
-                    MngrScript.Instance.chooseBlurbByChar("a",false);
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    StartCoroutine(WaitForResponse());
-                    
-                    
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to radio the ship");
+                        set = true;
+                    }
+
+                    if (isAxisButtonDown(button))
+                    {
+                        activated = true;
+
+                        print("radioing");
+                        MngrScript.Instance.chooseBlurbByChar("a", false);
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        StartCoroutine(WaitForResponse());
+                    }
+
                 }
             }
         }

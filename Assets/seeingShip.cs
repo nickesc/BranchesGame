@@ -1,54 +1,67 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using HighlightPlus;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class seeingShip : MonoBehaviour
 {
-    private bool seen = false;
+
+
+    private bool lighted = false;
+    public HighlightEffect fenceEffect;
     public GameObject triggerObject;
-    public Transform target;
-    public Camera cam;
-    
+    public Collider playerCapsule;
+    public Collider FOVCone;
+
     // Start is called before the first frame update
     void Start()
     {
-        target = triggerObject.GetComponent<Transform>();
-        cam = cam.GetComponent<Camera>();
-
+        fenceEffect.SetHighlighted(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (lighted == false)
+        {
+            if (MngrScript.Instance.getCurrentState()=="Lit")
+            {
+                MngrScript.Instance.setOneBlurb("Go to the cliff by the lighthouse");
+                fenceEffect.SetHighlighted(true);
+                lighted = true;
+            }
+        }
+
+
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (MngrScript.Instance.getCurrentState() == "WokeUp")
+        if (lighted)
         {
-            if (seen == false)
+            if (other == playerCapsule || other == FOVCone)
             {
-                Vector3 viewPos = cam.WorldToViewportPoint(target.position);
-
-                if (seen == false)
+                if (MngrScript.Instance.getCurrentState() == "Lit" && MngrScript.Instance.SeeingShip)
                 {
-                    if (viewPos.x > 0 && viewPos.x < 1)
-                    {
-                    
-                        if (viewPos.y > 0 && viewPos.y < 1)
-                        {
-                            //MngrScript.Instance.CancelFreeze.Freeze();
-                            seen = true;
-                            MngrScript.Instance.PushSubtitle("That doesn't look good...", "Keeper5", false);
-                            //MngrScript.Instance.SetPrompt("Objects outlined in white are interactable\nPress [LCtrl] or (B) to continue");
-                        }
+                    fenceEffect.SetHighlighted(false);
+                    lighted = false;
+                        MngrScript.Instance.chooseBlurbByChar("a");
+                        MngrScript.Instance.PushSubtitle("Thank God, it worked...", "Keeper25", false);
+                        MngrScript.Instance.moveTheShip = true;
+                        MngrScript.Instance.GameFreeze.Freeze();
+                        Destroy(MngrScript.Instance.PauseFreeze);
+                        MngrScript.Instance.Fin = true;
+                        //MngrScript.Instance.SetPrompt("Objects outlined in white are interactable\nPress [LCtrl] or (B) to continue");
 
-                    }
                 }
             }
         }
-        
     }
+    
+    
+
 }
+

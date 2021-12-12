@@ -612,7 +612,7 @@ public class Alternatives : IState
             if (mngr.playingVA==false && pushedObj == false)
             {
                 mngr.PushSubtitle("I know the foghorn on the boat I came in on was pretty loud. Or...","Keeper23",false);
-                mngr.setTwoBlurbs("use the tugboat's horn", "light a fire", "alternatives");
+                mngr.setTwoBlurbs("use the boat's foghorn", "start a fire", "alternatives");
                 mngr.toggleDoors();
                 mngr.ChoosingAlt = true; // IF MNGR.CHOOSINGLT=FALSE AFTER THIS DELETE BOTH SCRIPTS
                 pushedObj = true;
@@ -850,6 +850,47 @@ public class GoneOut : IState
     }
 }
 
+
+// Final State, freezes and plays credits
+public class Fin : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("Fin");
+    }
+
+    public Fin(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        mngr.endGame();
+        //mngr.chooseBlurbByChar("a");
+        
+        
+        
+    }
+    
+ 
+    public void Execute()
+    {
+       
+        
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
 public class MngrScript : Singleton<MngrScript>
 {
     
@@ -902,6 +943,9 @@ public class MngrScript : Singleton<MngrScript>
     //If you choose to leave the lighthouse
     public bool GoneOut { get; set;}
     
+    
+    public bool Fin { get; set; }
+    public bool SeeingShip { get; set; }
 
 
     StateMachine stateMachine = new StateMachine();
@@ -925,6 +969,9 @@ public class MngrScript : Singleton<MngrScript>
 
     public GameObject yacht;
     public GameObject yachtBeached;
+    public bool turnAround;
+    public bool moveTheShip;
+    
     public GameObject nightLight;
     public GameObject sunsetLight;
     
@@ -957,6 +1004,7 @@ public class MngrScript : Singleton<MngrScript>
     public bool tpTimeout = false;
     public bool playingVA = false;
     public bool tryingToLight = false;
+
 
 
     //public Material sunset;
@@ -1560,7 +1608,19 @@ public class MngrScript : Singleton<MngrScript>
             tryFindPlayer();
             tryPlayVA();
         }
+
+        if (Fin==true && getCurrentState()!="Fin")
+        {
+            ChangeState(new Fin(this));
+        }
         
         stateMachine.Update();
+    }
+
+    public void endGame()
+    {
+        GameFreeze.Freeze();
+        Destroy(GameFreeze);
+        SetPrompt("Fin.");
     }
 }

@@ -70,7 +70,8 @@ public class lightIsOut : MonoBehaviour
         {
             if (other == FOVCone && lighted)
             {
-                MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+                MngrScript.Instance.SetPrompt("Press [E] or (X) to light the beacon");
+                set = true;
             }
         }
     }
@@ -86,6 +87,8 @@ public class lightIsOut : MonoBehaviour
             }
         }
     }
+
+    private bool set = false;
 
     private void OnTriggerStay(Collider other)
     {
@@ -104,17 +107,25 @@ public class lightIsOut : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    print("fresnel lens trigger");
-                    //MngrScript.Instance.toggleDoors();
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    MngrScript.Instance.LightOut = true;
-                    activated = true;
-                    //MngrScript.Instance.ApproachedLighthouse = true;
-                    //Destroy(triggerObject);
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to light the beacon");
+                        set = true;
+                    }
 
+                    if (isAxisButtonDown(button))
+                    {
+                        print("fresnel lens trigger");
+                        //MngrScript.Instance.toggleDoors();
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        MngrScript.Instance.LightOut = true;
+                        activated = true;
+                        //MngrScript.Instance.ApproachedLighthouse = true;
+                        //Destroy(triggerObject);
+                    }
                 }
             }
         }

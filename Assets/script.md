@@ -1,5 +1,7 @@
 ﻿# Branches Script Text
-# Intro 
+By nickesc/N. Escobar
+
+## Intro
 
 Keeper: It's good to be back...
 
@@ -12,6 +14,7 @@ Keeper: Thanks, Lou
 Keeper: What time is it? Ugh...
 
 Keeper: Better get started on those things Lou mentioned
+
 
 ## Gone Up Branch
 
@@ -27,7 +30,7 @@ Keeper: You've gotta be kidding me, Lou. You broke the igniter
 
 Keeper: I should try to radio them, they still can't see a thing out there
 
-Keeper: Crap, no answer
+Keeper: Damn, no answer
 
 Keeper: What am I gonna do now?
 
@@ -38,6 +41,9 @@ Keeper: Forget the light, there are other ways to signal a ship.
 
 Keeper: I know the foghorn on the boat I came in on was pretty loud. Or...
 
+Keeper: I'm running out of time, I'd better hurry
+
+
 #### Foghorn Branch
 
 Keeper: I hope this is loud enough...
@@ -46,15 +52,20 @@ Keeper: I hope this is loud enough...
 
 Keeper: Oh no...
 
+
 #### Blaze Branch
 
 Keeper: I cant believe I'm doing this...
 
+Keeper: I'd better make sure they're alright
+
 Keeper: Thank God, it worked...
+
 
 ### Fix the Light Branch
 
 Keeper: I guess I'd better find a way to fix this light
+
 
 #### Attack Lou Branch
 
@@ -66,9 +77,12 @@ Lou: I broke- Wha-?
 
 Keeper: Oh no...
 
+
 #### Fix it Yourself Branch
 
 Keeper: Thank God, it worked...
+
+
 
 ## Gone Out Branch
 

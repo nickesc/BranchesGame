@@ -63,9 +63,11 @@ public class GrabGas : MonoBehaviour
         }
     }
     
+    bool set = false;
 
     private void OnTriggerStay(Collider other)
     {
+        
 
 
         // make sure the object has a collider
@@ -81,21 +83,29 @@ public class GrabGas : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    MngrScript.Instance.ChoosingAlt = false;
-                    activated = true;
-                    MngrScript.Instance.WeDidntStartTheFire = true;
-                    
-                    print("we didn't start the fire");
-                    //MngrScript.Instance.chooseBlurbByChar("b");
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    Destroy(gameObject);
-                    //MngrScript.Instance.Alternatives = true;
-                    
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to pick up the gas can");
+                        set = true;
+                    }
+                    if (isAxisButtonDown(button))
+                    {
+                        MngrScript.Instance.ChoosingAlt = false;
+                        activated = true;
+                        MngrScript.Instance.WeDidntStartTheFire = true;
+
+                        print("we didn't start the fire");
+                        //MngrScript.Instance.chooseBlurbByChar("b");
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        Destroy(gameObject);
+                        //MngrScript.Instance.Alternatives = true;
 
 
+
+                    }
                 }
             }
         }

@@ -60,6 +60,7 @@ public class alternatives : MonoBehaviour
             if (lighted)
             {
                 MngrScript.Instance.SetPrompt("Press [E] or (X) to look for alternate ways to signal the ship in the emergency manual");
+                set = true;
             }
         }
     }
@@ -75,7 +76,8 @@ public class alternatives : MonoBehaviour
             }
         }
     }
-    
+
+    private bool set = false;
 
     private void OnTriggerStay(Collider other)
     {
@@ -94,18 +96,26 @@ public class alternatives : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    activated = true;
-                    
-                    print("alternatives");
-                    MngrScript.Instance.chooseBlurbByChar("a");
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    MngrScript.Instance.Alternatives = true;
-                    Destroy(this);
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to look for alternate ways to signal the ship in the emergency manual");
+                        set = true;
+                    }
 
+                    if (isAxisButtonDown(button))
+                    {
+                        activated = true;
 
+                        print("alternatives");
+                        //MngrScript.Instance.chooseBlurbByChar("a");
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        MngrScript.Instance.Alternatives = true;
+                        Destroy(this);
+
+                    }
                 }
             }
         }
