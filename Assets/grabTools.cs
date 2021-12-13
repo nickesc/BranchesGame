@@ -12,6 +12,7 @@ public class grabTools : MonoBehaviour
     public GameObject triggerObject;
     public string button;
     public Collider FOVCone;
+    public GameObject box;
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +66,15 @@ public class grabTools : MonoBehaviour
     
     bool set = false;
 
-    
+    IEnumerator WaitForChange()
+    {
+        Destroy(box);
+        MngrScript.Instance.chooseBlurbByChar("a");
+        yield return new WaitForSeconds(3);
+        MngrScript.Instance.setOneBlurb("fix the light", "objective");
+        MngrScript.Instance.BasementTools = true;
+        Destroy(this);
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -88,14 +97,11 @@ public class grabTools : MonoBehaviour
                 if (other == FOVCone && isAxisButtonDown(button))
                 {
                     activated = true;
-
                     MngrScript.Instance.ChoosingFix = false;
-                    MngrScript.Instance.BasementTools = true;
-
                     print("basementTools");
                     triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
                     MngrScript.Instance.SetPrompt("");
-                    
+                    StartCoroutine(WaitForChange());
                     //MngrScript.Instance.Alternatives = true;
                 }
 

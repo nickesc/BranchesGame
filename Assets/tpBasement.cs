@@ -106,7 +106,7 @@ public class tpBasement : MonoBehaviour
                     MngrScript.Instance.SetPrompt("");
                     player.transform.position = basementTarget.transform.position;
                     player.transform.rotation = basementTarget.transform.rotation;
-                    MngrScript.Instance.setOneBlurb("use tools from the basement","fix the light");
+                    MngrScript.Instance.setOneBlurb("get tools from the basement","fix the light");
                     //MngrScript.Instance.Blackout(false,false);
         
                     Destroy(this);

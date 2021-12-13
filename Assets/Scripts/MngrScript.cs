@@ -577,6 +577,7 @@ public class Alternatives : IState
     MngrScript mngr;
     private bool pushedObj;
     private bool readyForObj = false;
+    private bool takenDownImage = false;
     
     public string getName()
     {
@@ -596,8 +597,10 @@ public class Alternatives : IState
         mngr.PushSubtitle("Forget the light, there are other ways to signal a ship","Keeper15", false);
         pushedObj = false;
         
+        
+        
         //fix
-        readyForObj = true;
+        
         //mngr.setTwoBlurbs("fix the light", "check for alternatives", "options");
 
 
@@ -606,7 +609,16 @@ public class Alternatives : IState
  
     public void Execute()
     {
+        if (mngr.FeetFrozen==false && takenDownImage == false)
+        {
+            mngr.SetPrompt("");
+            mngr.SetImage("transparentImage");
+            readyForObj = true;
+            takenDownImage = true;
+        }
 
+        
+        
         if (readyForObj == true)
         {
             if (mngr.playingVA==false && pushedObj == false)
@@ -783,7 +795,7 @@ public class FixTheLight : IState
         Debug.Log("Entering "+getName()+" state");
         mngr.chooseBlurbByChar("b");
         mngr.PushSubtitle("I guess I'd better find a way to fix this light","Keeper16", false);
-        mngr.setTwoBlurbs("bring Lou up from his shop","use tools from the basement", "fix the light");
+        mngr.setTwoBlurbs("bring Lou up from his shop","get tools from the basement", "fix the light");
         mngr.ChoosingFix = true;
         mngr.toggleDoors();
         //mngr.toggleBasement();
@@ -854,7 +866,7 @@ public class AttackLou : IState
 
     }
 }
-public class BasementTools : MonoBehaviour, IState
+public class BasementTools : IState
 {
     MngrScript mngr;
     
@@ -869,17 +881,63 @@ public class BasementTools : MonoBehaviour, IState
         this.mngr = mngr;
     }
 
-    IEnumerator WaitForChange()
-    {
-        mngr.chooseBlurbByChar("a");
-        yield return new WaitForSeconds(3);
-        mngr.setOneBlurb("fix the light", "objective");
-    }
+    
  
     public void Enter()
     {
         Debug.Log("Entering "+getName()+" state");
-        StartCoroutine(WaitForChange());
+
+        if (mngr.Fixed == true)
+        {
+            mngr.ChangeState(new Fixed(mngr));
+        } 
+
+
+
+
+    }
+    
+ 
+    public void Execute()
+    {
+
+        if (mngr.BasementTools == true)
+        {
+            
+        }
+       
+        
+    }
+
+    public void Exit()
+    {
+        //mngr.LeavingWeDidnt = true;
+        Debug.Log("Exiting "+getName()+" state");
+
+    }
+}
+
+public class Fixed : IState
+{
+    MngrScript mngr;
+    
+    public string getName()
+    {
+        return ("Fixed");
+    }
+
+    public Fixed(MngrScript mngr)
+    {
+        
+        this.mngr = mngr;
+    }
+
+    
+ 
+    public void Enter()
+    {
+        Debug.Log("Entering "+getName()+" state");
+        
 
 
 
@@ -1048,7 +1106,7 @@ public class MngrScript : Singleton<MngrScript>
     
     public bool Fin { get; set; }
     public bool SeeingShip { get; set; }
-    
+    public bool Fixed { get; set; }
 
 
     StateMachine stateMachine = new StateMachine();

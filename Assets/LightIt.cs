@@ -56,7 +56,7 @@ public class LightIt : MonoBehaviour
         {
             if (lighted)
             {
-                MngrScript.Instance.SetPrompt("Press [E] or (X) to light the fire");
+                MngrScript.Instance.SetPrompt("Press [E] or (X) to light the gasoline");
             }
         }
     }

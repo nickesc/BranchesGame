@@ -25,7 +25,8 @@ public class raiseLight : MonoBehaviour
             {
                 light.shadows = LightShadows.None;
                 light.range = 10;
-                transform.position = transform.position + new Vector3(0,-.5f);
+                //light.color = new Color(255,255,199);
+                transform.position += new Vector3(0,-.5f);
                 raised = true;
             }
         }

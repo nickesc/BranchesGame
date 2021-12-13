@@ -29,7 +29,7 @@ public class seeingShip : MonoBehaviour
         {
             if (MngrScript.Instance.getCurrentState()=="Lit")
             {
-                MngrScript.Instance.setOneBlurb("Go to the cliff by the lighthouse");
+                MngrScript.Instance.setOneBlurb("Get to the cliff by the lighthouse");
                 fenceEffect.SetHighlighted(true);
                 lighted = true;
             }

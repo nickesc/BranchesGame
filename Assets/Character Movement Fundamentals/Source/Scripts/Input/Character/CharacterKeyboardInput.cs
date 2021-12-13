@@ -13,8 +13,9 @@ namespace CMF
 
 		//If this is enabled, Unity's internal input smoothing is bypassed;
 		public bool useRawInput = true;
+		private bool active;
 
-        public override float GetHorizontalMovementInput()
+		public override float GetHorizontalMovementInput()
 		{
 			if(useRawInput)
 				return Input.GetAxisRaw(horizontalInputAxis);
@@ -32,7 +33,22 @@ namespace CMF
 
 		public override bool IsJumpKeyPressed()
 		{
-			return Input.GetAxis(jumpKey) != 0;
+			if (active)
+			{
+				if (MngrScript.Instance.getCurrentState() == "Menu" || MngrScript.Instance.getCurrentState() == "SplashScreen")
+				{
+					return Input.GetAxis(jumpKey) != 0;
+				}
+				else
+				{
+					active = false;
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
 		}
     }
 }

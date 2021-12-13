@@ -111,7 +111,9 @@ public class alternatives : MonoBehaviour
                         print("alternatives");
                         //MngrScript.Instance.chooseBlurbByChar("a");
                         triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                        MngrScript.Instance.SetPrompt("");
+                        MngrScript.Instance.SetImage("emergencyManual");
+                        MngrScript.Instance.CancelFreeze.Freeze();
+                        MngrScript.Instance.SetPrompt("Press [LCtrl] or (B) to continue");
                         MngrScript.Instance.Alternatives = true;
                         Destroy(this);
 

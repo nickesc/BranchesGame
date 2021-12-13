@@ -33,6 +33,15 @@ public class foghornLeghorn : MonoBehaviour
                 lighted = true;
             }
         }
+
+        if (activated)
+        {
+            if (MngrScript.Instance.playingVA == false)
+            {
+                MngrScript.Instance.Fin = true;
+                Destroy(this);
+            }
+        }
     }
 
     bool isAxisButtonDown(string _button)
@@ -98,7 +107,7 @@ public class foghornLeghorn : MonoBehaviour
                     MngrScript.Instance.PushSubtitle("foghorn","foghorn");
                     MngrScript.Instance.PushSubtitle("distant shipwreck","crash");
                     MngrScript.Instance.PushSubtitle("Oh no...","Keeper22",false);
-                    Destroy(this);
+                    
 
                     //MngrScript.Instance.Alternatives = true;
 

@@ -63,7 +63,7 @@ public class fixingOptions : MonoBehaviour
         {
             if (other == FOVCone && lighted)
             {
-                MngrScript.Instance.SetPrompt("Press [E] or (X) to check for ways to fix the light");
+                MngrScript.Instance.SetPrompt("Press [E] or (X) to look for ways to fix the light");
                 set = true;
             }
         }
@@ -104,7 +104,7 @@ public class fixingOptions : MonoBehaviour
                 {
                     if (set == false)
                     {
-                        MngrScript.Instance.SetPrompt("Press [E] or (X) to check for ways to fix the light");
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to look for ways to fix the light");
                         set = true;
                     }
 

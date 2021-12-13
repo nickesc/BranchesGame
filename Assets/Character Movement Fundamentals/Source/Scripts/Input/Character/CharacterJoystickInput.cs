@@ -18,8 +18,9 @@ namespace CMF
 		//If any input falls below this value, it is set to '0';
         //Use this to prevent any unwanted small movements of the joysticks ("jitter");
 		public float deadZoneThreshold = 0.2f;
+		private bool active = true;
 
-        public override float GetHorizontalMovementInput()
+		public override float GetHorizontalMovementInput()
 		{
 			float _horizontalInput;
 
@@ -54,8 +55,23 @@ namespace CMF
 		public override bool IsJumpKeyPressed()
 		{
 			//print(Input.GetAxis(jumpKey));
-			return Input.GetAxis(jumpKey) != 0;
-			
+			if (active)
+			{
+				if (MngrScript.Instance.getCurrentState() == "Menu" || MngrScript.Instance.getCurrentState() == "SplashScreen")
+				{
+					return Input.GetAxis(jumpKey) != 0;
+				}
+				else
+				{
+					active = false;
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+
 			//return false;
 		}
 

@@ -30,11 +30,11 @@ public class nearLighthouseTrigger : MonoBehaviour
 
             if (volumeBit % 2 == 0)
             {
-                ocean.volume = .4f;
+                ocean.volume = .7f;
             }
             else
             {
-                ocean.volume = .7f;
+                ocean.volume = 1;
             }
 
             volumeBit++;

@@ -17,12 +17,12 @@ public class gasTrail : MonoBehaviour
     IEnumerator WaitToChange()
     {
         yield return new WaitForSeconds(3);
-        MngrScript.Instance.setOneBlurb("make a trail of gas outside");
+        MngrScript.Instance.setOneBlurb("make a trail of gasoline outside");
     }
     IEnumerator WaitToChange2()
     {
         yield return new WaitForSeconds(1);
-        MngrScript.Instance.setOneBlurb("light the fire");
+        MngrScript.Instance.setOneBlurb("light the gasoline");
     }
 
     // Update is called once per frame

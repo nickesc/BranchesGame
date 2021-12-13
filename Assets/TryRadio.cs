@@ -79,7 +79,7 @@ public class TryRadio : MonoBehaviour
     IEnumerator WaitForResponse()
     {
         headphones.SetActive(false);
-        MngrScript.Instance.PushSubtitle("static");
+        MngrScript.Instance.PushSubtitle("static","static",true);
         yield return new WaitForSeconds(5);
         headphones.SetActive(true);
         MngrScript.Instance.Radioed = true;
