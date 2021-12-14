@@ -82,7 +82,7 @@ public class ApproachLighthouse : MonoBehaviour
     {
         if (other == FOVCone && MngrScript.Instance.getCurrentState()=="DisembarkedBoat")
         {
-            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to read the note on the door");
         }
     }
 

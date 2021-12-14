@@ -31,6 +31,9 @@ TagManager:
   - nightLight
   - yachtBeached
   - cargo
+  - byline
+  - thanks
+  - info
   layers:
   - Default
   - TransparentFX

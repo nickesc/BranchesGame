@@ -38,7 +38,7 @@ public class GetInBed : MonoBehaviour
     {
         if (other == FOVCone && MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
         {
-            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to get into bed");
         }
     }
 

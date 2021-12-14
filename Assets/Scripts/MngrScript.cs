@@ -1156,6 +1156,9 @@ public class MngrScript : Singleton<MngrScript>
     public Text subtitleUI = null;
     List<KeyValuePair<string, string>> subtitleQueue = new List<KeyValuePair<string, string>>();
     private int queueCount = 0;
+    private GameObject byline = null;
+    private GameObject thanks = null;
+    private GameObject info = null;
 
     public bool waiting = false;
     public bool waiting1;
@@ -1750,8 +1753,46 @@ public class MngrScript : Singleton<MngrScript>
                 print("doubleObjective not found yet");
             }
         }
+        if (byline == null)
+        {
+            try
+            {
+                byline = GameObject.FindWithTag("byline");
+                byline.SetActive(false);
+            }
+            catch
+            {
+                print("byline not found yet");
+            }
+        }
+        if (thanks == null)
+        {
+            try
+            {
+                thanks = GameObject.FindWithTag("thanks");
+                thanks.SetActive(false);
+            }
+            catch
+            {
+                print("thanks not found yet");
+            }
+        }
+        if (info == null)
+        {
+            try
+            {
+                info = GameObject.FindWithTag("info");
+                info.SetActive(false);
+            }
+            catch
+            {
+                print("info not found yet");
+            }
+        }
         
     }
+    
+    
     void tryPlayVA()
     {
         if (queueCount != 0 && playingVA==false)
@@ -1794,11 +1835,33 @@ public class MngrScript : Singleton<MngrScript>
         stateMachine.Update();
     }
 
-    public void endGame()
+    
+    
+    IEnumerator End()
     {
         GameFreeze.Freeze();
         Destroy(GameFreeze);
         Destroy(PauseFreeze);
+        clearBlurbs();
+        yield return new WaitForSeconds(2);
+        byline.SetActive(true);
+        yield return new WaitForSeconds(5);
+        byline.SetActive(false);
+        yield return new WaitForSeconds(1);
+        thanks.SetActive(true);
+        yield return new WaitForSeconds(5);
+        thanks.SetActive(false);
+        yield return new WaitForSeconds(1);
+        info.SetActive(true);
+        yield return new WaitForSeconds(5);
+        info.SetActive(false);
+        yield return new WaitForSeconds(1);
         SetPrompt("Fin.");
+    }
+    
+
+    public void endGame()
+    {
+        StartCoroutine(End());
     }
 }
