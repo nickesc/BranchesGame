@@ -89,6 +89,7 @@ public class SplashScreen : IState
  
     public void Enter()
     {
+        mngr.Menuing = true;
         MngrScript.Instance.Splash = false;
         Debug.Log("Entering "+getName()+" state");
         SceneManager.LoadScene("Splash");
@@ -135,7 +136,7 @@ public class Menu : IState
  
     public void Execute()
     {
-        if (mngr.isAxisButtonDown("Jump") && pushed==false)
+        if (mngr.Menuing == false && pushed==false)
         {
             pushed = true;
             mngr.setNightSky();
@@ -1055,6 +1056,7 @@ public class MngrScript : Singleton<MngrScript>
     
     public bool FeetFrozen { get; set;}
 
+    public bool Menuing { get; set; }
     public int Score { get; set;}
     
     public bool Splash { get; set;}
@@ -1107,6 +1109,7 @@ public class MngrScript : Singleton<MngrScript>
     public bool Fin { get; set; }
     public bool SeeingShip { get; set; }
     public bool Fixed { get; set; }
+    
 
 
     StateMachine stateMachine = new StateMachine();
