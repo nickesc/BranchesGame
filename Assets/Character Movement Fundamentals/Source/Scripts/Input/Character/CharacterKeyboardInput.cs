@@ -35,6 +35,7 @@ namespace CMF
 		{
 			if (active)
 			{
+				
 				if (MngrScript.Instance.getCurrentState() == "Menu" || MngrScript.Instance.getCurrentState() == "SplashScreen")
 				{
 					return Input.GetAxis(jumpKey) != 0;

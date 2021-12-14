@@ -82,7 +82,7 @@ public class ApproachLighthouse : MonoBehaviour
     {
         if (other == FOVCone && MngrScript.Instance.getCurrentState()=="DisembarkedBoat")
         {
-            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to read the note on the door");
         }
     }
 
@@ -98,15 +98,11 @@ public class ApproachLighthouse : MonoBehaviour
     {
 
         
-        // make sure the object has a collider
-        // and that 'isTrigger' is True
-        // Apply to ALL MESHES WITH A COLLIDER
-        // it will not activaate if the other
-        // colliders in the trigger are also triggers
+         
         
 
         
-        // if the object needs to freeze the game on interaction, add this:
+         
         if (MngrScript.Instance.getCurrentState() == "DisembarkedBoat")
         {
             if (other == FOVCone && isAxisButtonDown(button))

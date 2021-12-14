@@ -125,6 +125,7 @@ public class Menu : IState
     {
         this.mngr = mngr;
     }
+    
  
     public void Enter()
     {
@@ -1108,6 +1109,8 @@ public class MngrScript : Singleton<MngrScript>
     public bool SeeingShip { get; set; }
     public bool Fixed { get; set; }
 
+    
+    public bool Dev { get; set; }
 
     StateMachine stateMachine = new StateMachine();
 
@@ -1490,6 +1493,17 @@ public class MngrScript : Singleton<MngrScript>
     public void PushSubtitle(string subtitle, string fileName = "silenceFive", bool thought  = true)
     {
         
+        
+
+        if (fileName == "Keeper9")
+        {
+            playerVASource.volume = .7f;
+        }
+        else
+        {
+            playerVASource.volume = 1;
+        }
+        
         if (subtitle == "")
         {
             subtitleUI.text = "";
@@ -1788,6 +1802,7 @@ public class MngrScript : Singleton<MngrScript>
     {
         GameFreeze.Freeze();
         Destroy(GameFreeze);
+        Destroy(PauseFreeze);
         SetPrompt("Fin.");
     }
 }

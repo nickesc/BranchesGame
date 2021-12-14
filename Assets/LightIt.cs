@@ -102,15 +102,11 @@ private void OnTriggerStay(Collider other)
     {
 
 
-        // make sure the object has a collider
-        // and that 'isTrigger' is True
-        // Apply to ALL MESHES WITH A COLLIDER
-        // it will not activaate if the other
-        // colliders in the trigger are also triggers
+         
 
 
 
-        // if the object needs to freeze the game on interaction, add this:
+         
         if (activated == false)
         {
             if (lighted)

@@ -22,11 +22,7 @@ public class TriggerTemplate : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        // make sure the object has a collider
-        // and that 'isTrigger' is True
-        // Apply to ALL MESHES WITH A COLLIDER
-        // it will not activaate if the other
-        // colliders in the trigger are also triggers
+         
 
         print("help");
 

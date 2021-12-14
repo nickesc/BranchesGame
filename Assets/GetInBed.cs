@@ -38,7 +38,7 @@ public class GetInBed : MonoBehaviour
     {
         if (other == FOVCone && MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
         {
-            MngrScript.Instance.SetPrompt("Press [E] or (X) to interact");
+            MngrScript.Instance.SetPrompt("Press [E] or (X) to get into bed");
         }
     }
 
@@ -54,15 +54,11 @@ public class GetInBed : MonoBehaviour
     {
 
         
-        // make sure the object has a collider
-        // and that 'isTrigger' is True
-        // Apply to ALL MESHES WITH A COLLIDER
-        // it will not activaate if the other
-        // colliders in the trigger are also triggers
+         
         
 
         
-        // if the object needs to freeze the game on interaction, add this:
+         
         if (MngrScript.Instance.getCurrentState()=="ApproachedLighthouse")
         {
             if (other == FOVCone && isAxisButtonDown(button))
