@@ -20,6 +20,9 @@ public class menuChanger : MonoBehaviour
         {
             m_isAxisInUse = false;
         }
+        
+        controls.SetActive(false);
+        intro.SetActive(false);
     }
 
     // Update is called once per frame

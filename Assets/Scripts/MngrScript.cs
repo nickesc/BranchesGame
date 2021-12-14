@@ -295,7 +295,7 @@ public class ApproachedLighthouse : IState
         mngr.ReadLousNote = false;
         mngr.CancelFreeze.Freeze();
         m_isAxisInUse = true;
-        mngr.PushSubtitle("There's a note on the door");
+        //mngr.PushSubtitle("There's a note on the door");
         mngr.SetPrompt("Press [LCtrl] or (B) to close");
         mngr.SetImage("LousNote");
         
@@ -360,7 +360,7 @@ public class WokeUp : IState
         mngr.setNightSky();
         mngr.yacht.SetActive(true);
         //mngr.toggleBasement();
-        mngr.setTwoBlurbs("head into town", "climb up to the beacon", "options");
+        mngr.setTwoBlurbs("head into town (not implemented)", "climb up to the beacon", "options");
         
         mngr.Wait(5);
         mngr.PushSubtitle("What time is it? Ugh...", "Keeper8", false);
@@ -888,10 +888,7 @@ public class BasementTools : IState
     {
         Debug.Log("Entering "+getName()+" state");
 
-        if (mngr.Fixed == true)
-        {
-            mngr.ChangeState(new Fixed(mngr));
-        } 
+         
 
 
 
@@ -907,7 +904,10 @@ public class BasementTools : IState
             
         }
        
-        
+        if (mngr.Fixed == true)
+        {
+            mngr.ChangeState(new Fixed(mngr));
+        }
     }
 
     public void Exit()
@@ -1310,8 +1310,12 @@ public class MngrScript : Singleton<MngrScript>
     public string[] setTwoBlurbs(string textA, string textB, string title = "objectives")
     {
         clearBlurbs();
+        
+        
 
         branchBlurbA.text = "☐ ";
+
+
         branchBlurbB.text = "☐ ";
 
         branchBlurbA.text = branchBlurbA.text + textA;
@@ -1477,7 +1481,7 @@ public class MngrScript : Singleton<MngrScript>
         if(subtitleInfo.Value== "Keeper9")
         
         {
-            playerVASource.volume = .7f;
+            playerVASource.volume = .6f;
         }
         else
         {
@@ -1842,6 +1846,7 @@ public class MngrScript : Singleton<MngrScript>
     
     IEnumerator End()
     {
+        GameObject.FindWithTag("crosshair").SetActive(false);
         GameFreeze.Freeze();
         Destroy(GameFreeze);
         Destroy(PauseFreeze);

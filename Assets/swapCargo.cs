@@ -5,6 +5,7 @@ using UnityEngine;
 public class swapCargo : MonoBehaviour
 {
     public GameObject cargo;
+    public GameObject blocker;
     
     // Start is called before the first frame update
     void Start()
@@ -15,8 +16,9 @@ public class swapCargo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MngrScript.Instance.getCurrentState() == "WokeUp")
+        if (MngrScript.Instance.ChoosingFix==true)
         {
+            blocker.SetActive(false);
             cargo.SetActive(true);
             Destroy(this);
         }

@@ -14,6 +14,7 @@ public class haveTime : MonoBehaviour
                 MngrScript.Instance.getCurrentState() == "FixTheLight")
             {
                 print("crossing havetime trigger");
+                MngrScript.Instance.toggleDoors();
                 MngrScript.Instance.PushSubtitle("I'm running out of time, I'd better hurry","Keeper28",false);
                 Destroy(gameObject);
             }

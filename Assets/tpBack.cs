@@ -87,23 +87,33 @@ public class tpBack : MonoBehaviour
         {
             if (lighted)
             {
-                if (other == FOVCone && isAxisButtonDown(button))
+                if (other == FOVCone)
                 {
-                    
-                    activated = true;
+                    if (set == false)
+                    {
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to pick up the gas can");
+                        set = true;
+                    }
 
-                    print("tp basement");
-                    
-                    triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
-                    MngrScript.Instance.SetPrompt("");
-                    player.transform.position = houseTarget.transform.position;
-                    player.transform.rotation = houseTarget.transform.rotation;
-                    //MngrScript.Instance.setOneBlurb("use tools from the basement","fix the light");
-                    //MngrScript.Instance.Blackout(false,false);
-        
-                    Destroy(this);
-                    //MngrScript.Instance.Alternatives = true;
+                    if (isAxisButtonDown(button))
+                    {
 
+                        activated = true;
+
+                        print("tp basement");
+
+                        triggerObject.GetComponent<HighlightEffect>().SetHighlighted(false);
+                        MngrScript.Instance.SetPrompt("");
+                        player.transform.position = houseTarget.transform.position;
+                        player.transform.rotation = houseTarget.transform.rotation;
+                        MngrScript.Instance.toggleDoors();
+                        //MngrScript.Instance.setOneBlurb("use tools from the basement","fix the light");
+                        //MngrScript.Instance.Blackout(false,false);
+
+                        Destroy(this);
+                        //MngrScript.Instance.Alternatives = true;
+
+                    }
                 }
             }
         }

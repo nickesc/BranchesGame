@@ -1364,7 +1364,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Written by
+  m_Text: created by
 --- !u!1 &6905619154015669253
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,7 +1561,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: for mor information visit
+  m_Text: for more information visit
 --- !u!1 &7407122321996068053
 GameObject:
   m_ObjectHideFlags: 0

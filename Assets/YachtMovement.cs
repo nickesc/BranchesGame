@@ -21,7 +21,7 @@ public class YachtMovement : MonoBehaviour
         {
             if (MngrScript.Instance.turnAround == true)
             {
-                gameObject.transform.Rotate(0, 180, 0.0f, Space.Self);
+                gameObject.transform.Rotate(0, 165, 0.0f, Space.Self);
                 turned = true;
             }
         }
