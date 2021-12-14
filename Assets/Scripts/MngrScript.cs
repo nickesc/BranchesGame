@@ -1468,6 +1468,16 @@ public class MngrScript : Singleton<MngrScript>
         subtitleUI.text = subtitleInfo.Key;
         playingVA = true;
         AudioClip voiceActing = Resources.Load<AudioClip>("Audio/Voice/"+subtitleInfo.Value);
+        if(subtitleInfo.Value== "Keeper9")
+        
+        {
+            playerVASource.volume = .7f;
+        }
+        else
+        {
+            playerVASource.volume = 1;
+        }
+        
         playerVASource.PlayOneShot(voiceActing);
         //print();
         yield return new WaitForSeconds(voiceActing.length);
@@ -1788,6 +1798,7 @@ public class MngrScript : Singleton<MngrScript>
     {
         GameFreeze.Freeze();
         Destroy(GameFreeze);
+        Destroy(PauseFreeze);
         SetPrompt("Fin.");
     }
 }

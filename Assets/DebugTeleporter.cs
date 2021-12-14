@@ -26,7 +26,7 @@ public class DebugTeleporter : MonoBehaviour
         if (Input.GetKeyDown(townTPButton))
         {
             print("debug teleport to town");
-            player.transform.position = new Vector3(348.8f, 174.59f, 731.7f);
+            player.transform.position = new Vector3(356.11f, 99.444f, 359.04f);
         }
     }
 }
