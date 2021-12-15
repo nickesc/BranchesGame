@@ -385,10 +385,7 @@ public class WokeUp : IState
         {
             mngr.ChangeState(new GoneUp(mngr));
         }
-        if (mngr.GoneOut)
-        {
-            mngr.ChangeState(new GoneOut(mngr));
-        }
+        
         
     }
 

@@ -91,7 +91,7 @@ public class tpBack : MonoBehaviour
                 {
                     if (set == false)
                     {
-                        MngrScript.Instance.SetPrompt("Press [E] or (X) to pick up the gas can");
+                        MngrScript.Instance.SetPrompt("Press [E] or (X) to go back up");
                         set = true;
                     }
 
