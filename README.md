@@ -1,13 +1,24 @@
 # Branches: a Game of Choice and Agency
 
-To open this Unity project, you will need:
-## 1. A Unity ID
+###### By [nickesc](https://github.com/nickesc)/[N. Escobar](https://nickesc.com)
+
+*Branches: a Game of Choice and Agency* is the product of a semester long senior comprehensive project to make a game that gives the player a feeling of agency through meaningful choice. Read more about the project and its development in the [paper](https://github.com/nickesc/BranchesGame/blob/main/Branches_%20A%20Game%20of%20Choice%20and%20Agency.pdf).
+
+## Playing the game
+
+There are two ways to play *Branches*: 
+1. by loading the Unity project on the game's [Github](https://github.com/nickesc/BranchesGame/releases)
+2. by dowlnoading the latest release on the game's [releases page](https://github.com/nickesc/BranchesGame/releases)
+
+To open the Unity project, you will need:
+
+### 1. A Unity ID
 
 https://id.unity.com/account/new
 
 You will need to create an account and verify your email to use the Unity Editor. You will have the chance to do this from Unity Hub once it is installed
 
-## 2. The Unity Hub:
+### 2. The Unity Hub:
 
 https://unity.com/download
 
@@ -19,7 +30,7 @@ This is done in different ways in different versions of the Unity Hub, follow th
 
 https://support.unity.com/hc/en-us/articles/211438683-How-do-I-activate-my-license-
 
-## 3. The Unity Editor version 2020.3.19f1:
+### 3. The Unity Editor version 2020.3.19f1:
 
 Next, navigate to the Installs tab on the left of the window. Press "ADD" or "Install Editor" to install a new version of the Unity Editor
 
@@ -27,7 +38,7 @@ On this popup, click on the Archive tab and go to the "download archive" link (h
 
 On this page, select the "Unity 2020.x" tab, and scroll down to find Unity 2020.3.19, and click the big, green Unity Hub button in its download links
 
-## 4. The project files from GitHub
+### 4. The project files from GitHub
 
 clone the project into whatever directory you want to save it in
 
@@ -35,7 +46,7 @@ clone the project into whatever directory you want to save it in
 
 Back in the Unity Editor, from the Projects tab, click open and find the project directory.
 
-Unity will begin to open the project THIS MAY TAKE SOME TIME
+Unity will begin to open the project; this may take some time.
 
 Enjoy!
 
