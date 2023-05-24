@@ -20,7 +20,7 @@
   --n-text-color:rgb(30, 30, 30);
   --n-highlight-color:rgb(0, 174, 255);
   --n-white:rgb(255,255,255);
-  --n-bg-color: rgb(244, 244, 244);
+  --n-bg-color: rgb(245, 245, 245);
   --n-toolbar-color: var(--n-bg-color);
   --n-button-color: rgba(0, 0, 0, .05);
   --n-button-hover: rgba(0, 0, 0, .1);
@@ -103,12 +103,12 @@
 }
 
 .textLayer ::-moz-selection {
-  background: var(--n-highlight-color);
+  background: blue;
   background: AccentColor;
 }
 
 .textLayer ::selection {
-  background: var(--n-highlight-color);
+  background: blue;
   background: AccentColor;
 }
 
