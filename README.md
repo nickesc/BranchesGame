@@ -1,14 +1,18 @@
 # Branches: a Game of Choice and Agency
 
-###### By [nickesc](https://github.com/nickesc)/[N. Escobar](https://nickesc.com)
+###### By [nickesc](https://github.com/nickesc) / [N. Escobar](https://nickesc.com)
 
-*Branches: a Game of Choice and Agency* is the product of a semester long senior comprehensive project to make a game that gives the player a feeling of agency through meaningful choice. Read more about the project and its development in the [paper](https://github.com/nickesc/BranchesGame/blob/main/Branches_%20A%20Game%20of%20Choice%20and%20Agency.pdf).
+*Branches: a Game of Choice and Agency* is the product of a semester long senior comprehensive project to make a game that gives the player a feeling of agency through meaningful choice. 
+
+### Read more about the project and its development in the [Final Report](https://nickesc.github.io/BranchesGame).
 
 ## Playing the game
 
 There are two ways to play *Branches*: 
-1. by loading the Unity project on the game's [Github](https://github.com/nickesc/BranchesGame/releases)
-2. by dowlnoading the latest release on the game's [releases page](https://github.com/nickesc/BranchesGame/releases)
+1. by downloading the latest release on the game's [Releases page](https://github.com/nickesc/BranchesGame/releases)
+2. by cloning and loading the Unity project in the game's [Github repo](https://github.com/nickesc/BranchesGame/releases)
+
+------
 
 To open the Unity project, you will need:
 
