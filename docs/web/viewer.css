@@ -1111,9 +1111,9 @@
 
   --main-color: var(--n-text-color);
   --body-bg-color: var(--n-bg-color);
-  --progressBar-color: rgba(10, 132, 255, 1);
-  --progressBar-bg-color: rgba(221, 221, 222, 1);
-  --progressBar-blend-color: rgba(116, 177, 239, 1);
+  --progressBar-color: var(--n-bg-color);
+  --progressBar-bg-color: var(--n-bg-color);
+  --progressBar-blend-color: var(--n-bg-color);
   --scrollbar-color: auto;
   --scrollbar-bg-color: auto;
   --toolbar-icon-bg-color: var(--n-text-color);
