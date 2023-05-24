@@ -4,7 +4,10 @@
 
 *Branches: a Game of Choice and Agency* is the product of a semester long senior comprehensive project to make a game that gives the player a feeling of agency through meaningful choice. 
 
-### Read more about the project and its development in the [Final Report](https://nickesc.github.io/BranchesGame).
+#### Read more about the project and its development in the [Final Report](https://nickesc.github.io/BranchesGame).
+
+#### To see the game's script, go to the project's [Script Page](https://nickesc.github.io/Branches-Script/). 
+> The server that ran the [Script Page](https://nickesc.github.io/Branches-Script/) is no longer functional, I will fix it one day when I have the time and resources.
 
 ## Playing the game
 
