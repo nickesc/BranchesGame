@@ -3189,7 +3189,7 @@ const defaultOptions = {
     kind: OptionKind.WORKER,
   },
   workerSrc: {
-    value: "https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.js",
+    value: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.6.172/build/pdf.worker.js",
     kind: OptionKind.WORKER,
   },
 };
